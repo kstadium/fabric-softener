@@ -1,0 +1,13 @@
+- name: Remove mspconfig
+  become: true
+  file:
+    path: "{{ fabric_cfg_path | mandatory }}/{{ msp_config_name }}"
+    state: absent
+
+- name: Copy mspconfig
+  copy:
+        src: "{{ playbook_dir }}/{{ '/'.join(msp_dir.split('/')[:-1]) }}/{{ item.path }}"
+        dest: "{{ fabric_cfg_path | mandatory }}/{{msp_config_name}}/"
+  with_items:
+    - { path: "msp" }
+    - { path: "tls" }

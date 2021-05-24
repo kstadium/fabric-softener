@@ -1,0 +1,7 @@
+---
+- name: Create fabric-ca-server-config.yaml
+  template:
+    src: "fabric-ca-server-config.yaml.jinja2"
+    dest: "{{ fabric_ca_home | mandatory }}/fabric-ca-server-config.yaml"
+  vars:
+    operation_port: "{{ peer_operation_port | default(9443) }}"

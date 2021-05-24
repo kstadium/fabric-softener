@@ -1,0 +1,31 @@
+{% for ordererorg in (bld_orderer_orgs) %}
+  - Name: {{ ordererorg.name }}
+    SkipAsForeign: false
+    ID: {{ ordererorg.msp_id }}
+    MSPDir: {{ ordererorg.msp_dir | default("crypto-config/ordererOrganizations/" + ordererorg.domain +  "/msp")}}
+    Policies:
+        Readers:
+            Type: Signature
+{% if ordererorg.enable_node_ous %}
+            Rule: "OR('{{ ordererorg.msp_id }}.admin', '{{ ordererorg.msp_id }}.orderer')"
+{% else %}
+            Rule: "OR('{{ ordererorg.msp_id }}.member')"
+{% endif %}
+        Writers:
+            Type: Signature
+{% if ordererorg.enable_node_ous %}
+            Rule: "OR('{{ ordererorg.msp_id }}.admin', '{{ ordererorg.msp_id }}.orderer')"
+{% else %}
+            Rule: "OR('{{ ordererorg.msp_id }}.member')"
+{% endif %}
+        Admins:
+            Type: Signature
+            Rule: "OR('{{ ordererorg.msp_id }}.admin')"
+        Endorsement:
+            Type: Signature
+            Rule: "OR('{{ ordererorg.msp_id }}.member')"
+    OrdererEndpoints:
+{% for orderer in ( ordererorg.orderers | mandatory) %}
+        - {{ orderer.host_name }}.{{ ordererorg.domain }}:{{ orderer.port }}
+{% endfor %}
+{% endfor %}

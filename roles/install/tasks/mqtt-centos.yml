@@ -1,0 +1,13 @@
+- name: Install mosquitto 
+  yum:
+    name:
+      - mosquitto
+    state: present
+    update_cache: yes
+
+- name: Start mosquitto service
+  become: true
+  systemd:
+    name: "mosquitto"
+    enabled: yes
+    state: started

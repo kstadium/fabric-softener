@@ -1,0 +1,7 @@
+---
+- name: Delete ledger
+  become: true
+  file:
+    path: "{{ fabric_ca_home }}/"
+    state: absent
+

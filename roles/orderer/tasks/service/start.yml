@@ -1,0 +1,4 @@
+- name: include service role - start
+  include_role:
+    name: service
+    tasks_from: start.yml

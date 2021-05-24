@@ -1,0 +1,183 @@
+---
+################################################################################
+#
+#   Orderer Configuration
+#
+#   - This controls the type and configuration of the orderer.
+#
+################################################################################
+General:
+
+    ListenAddress: {{ orderer_id | mandatory }}
+
+    ListenPort: {{ orderer_port }}
+
+    TLS:
+        Enabled: true
+        PrivateKey: {{ msp_config_name }}/tls/server.key
+        Certificate: {{ msp_config_name }}/tls/server.crt
+        RootCAs:
+          - {{ msp_config_name }}/tls/ca.crt
+        ClientAuthRequired: false
+        ClientRootCAs:
+    Keepalive:
+        ServerMinInterval: 60s
+        ServerInterval: 7200s
+        ServerTimeout: 20s
+    Cluster:
+        SendBufferSize: 10
+        ClientCertificate: {{ msp_config_name }}/tls/server.crt
+        ClientPrivateKey: {{ msp_config_name }}/tls/server.key
+
+        ListenPort: {{ orderer_consenter_port | default(7056) }}
+        ListenAddress: {{ orderer_id | mandatory }}
+        ServerCertificate: {{ fabric_cfg_path | mandatory }}/{{ msp_config_name }}/tls/server.crt
+        ServerPrivateKey: {{ fabric_cfg_path | mandatory }}/{{ msp_config_name }}/tls/server.key
+    BootstrapMethod: file
+
+    BootstrapFile: {{ genesis_block_path }}
+
+    LocalMSPDir: {{ msp_config_name }}/msp
+
+    LocalMSPID: {{ msp_id | mandatory }}
+
+    Profile:
+        Enabled: false
+        Address: 0.0.0.0:6060
+
+{% include './templates/sw.yaml.jinja2' %}
+
+
+    Authentication:
+        TimeWindow: 15m
+
+
+################################################################################
+#
+#   SECTION: File Ledger
+#
+#   - This section applies to the configuration of the file or json ledgers.
+#
+################################################################################
+FileLedger:
+
+    Location: "{{ ledger_path }}"
+    Prefix: hyperledger-fabric-ordererledger
+
+################################################################################
+#
+#   SECTION: Kafka
+#
+#   - This section applies to the configuration of the Kafka-based orderer, and
+#     its interaction with the Kafka cluster.
+#
+################################################################################
+Kafka:
+
+    Retry:
+        ShortInterval: 5s
+        ShortTotal: 10m
+        LongInterval: 5m
+        LongTotal: 12h
+        NetworkTimeouts:
+            DialTimeout: 10s
+            ReadTimeout: 10s
+            WriteTimeout: 10s
+        Metadata:
+            RetryBackoff: 250ms
+            RetryMax: 3
+        Producer:
+            RetryBackoff: 100ms
+            RetryMax: 3
+        Consumer:
+            RetryBackoff: 2s
+    Topic:
+        ReplicationFactor: 3
+    Verbose: false
+
+    TLS:
+
+      Enabled: false
+
+      PrivateKey:
+        #File: path/to/PrivateKey
+
+      Certificate:
+        #File: path/to/Certificate
+
+      RootCAs:
+        #File: path/to/RootCAs
+
+    SASLPlain:
+      Enabled: false
+      User:
+      Password:
+
+    Version:
+
+################################################################################
+#
+#   Debug Configuration
+#
+#   - This controls the debugging options for the orderer
+#
+################################################################################
+Debug:
+
+    BroadcastTraceDir:
+
+    DeliverTraceDir:
+
+################################################################################
+#
+#   Operations Configuration
+#
+#   - This configures the operations server endpoint for the orderer
+#
+################################################################################
+Operations:
+    listenAddress: "{{ orderer_id }}:{{ operation_port | default(9443) }}"
+
+    TLS:
+        Enabled: false
+
+        Certificate:
+
+        PrivateKey:
+
+        ClientAuthRequired: false
+
+        ClientRootCAs: []
+
+################################################################################
+#
+#   Metrics  Configuration
+#
+#   - This configures metrics collection for the orderer
+#
+################################################################################
+Metrics:
+    provider: {{ metric_type | default('disabled')}}
+
+    Statsd:
+      Network: udp
+
+      Address: 127.0.0.1:8125
+
+      WriteInterval: 30s
+
+      Prefix:
+
+################################################################################
+#
+#   Consensus Configuration
+#
+#   - This section contains config options for a consensus plugin. It is opaque
+#     to orderer, and completely up to consensus implementation to make use of.
+#
+################################################################################
+Consensus:
+
+    WALDir: "{{ ledger_path }}/orderer/etcdraft/wal"
+
+    SnapDir: "{{ ledger_path }}/orderer/etcdraft/snapshot"

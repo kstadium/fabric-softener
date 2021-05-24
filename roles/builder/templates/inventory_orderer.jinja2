@@ -1,0 +1,20 @@
+{% for orderer in org.orderers %}
+{{ orderer.host_name }}_{{ org.name | lower }}:
+    ansible_host: {{ orderer.address }}
+    orderer_id: {{ orderer.host_name }}.{{ org.domain }}
+    msp_id: {{ org.msp_id }}
+    msp_dir: {{ msp_config_name }}/crypto-config/ordererOrganizations/{{ org.domain }}/orderers/{{ orderer.host_name}}.{{ org.domain }}/msp
+    tls_dir: {{ msp_config_name }}/crypto-config/ordererOrganizations/{{ org.domain }}/orderers/{{ orderer.host_name}}.{{ org.domain }}/tls
+    genesis_block_path: {{ msp_config_name }}/genesis.block
+    orderer_port: {{ orderer.port }}
+    orderer_consenter_port: {{ orderer.consenter_port }}
+    service: {{ orderer.host_name | lower }}-{{ org.name | lower }}
+    service_description: Orderer - {{ orderer.host_name }}.{{ org.domain }}
+    service_start_cmd: /usr/local/bin/orderer start
+    condition_path_exists: /opt/hyperledger/fabric/{{ orderer.host_name | lower }}.{{ org.domain | lower }}/orderer.yaml
+    service_variables:
+        - name: FABRIC_CFG_PATH
+          value: /opt/hyperledger/fabric/{{ orderer.host_name | lower }}.{{ org.domain | lower }}
+    fabric_cfg_path: /opt/hyperledger/fabric/{{ orderer.host_name | lower }}.{{ org.domain | lower }}
+    ansible_ssh_user: {{ orderer.ssh_user }}
+{% endfor %}

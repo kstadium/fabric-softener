@@ -1,0 +1,35 @@
+- name: Check fabric-ca installed
+  become: true
+  shell: "which fabric-ca-server"
+  register: ca_exists
+  ignore_errors: true
+
+- name: install fabric-ca
+  block:
+    - name: Clone Repository
+      git:
+        repo: "https://github.com/hyperledger/fabric-ca"
+        dest: "/tmp/fabric-ca"
+        version: "{{ install_version | default('main') }}"
+        accept_hostkey: true    
+        force : yes
+      register: result
+
+    - name: make clean
+      shell:
+        cmd: /bin/bash -ic 'make clean'
+        chdir: /tmp/fabric-ca
+
+    - name: Build Binary
+      shell: 
+        cmd: /bin/bash -ic 'make native'
+        chdir: /tmp/fabric-ca
+        
+    - name: Copy Binary to PATH
+      become: true
+      shell: 
+        cmd: cp bin/* /usr/local/bin
+        chdir: /tmp/fabric-ca
+
+  when: ca_exists.rc != 0
+    

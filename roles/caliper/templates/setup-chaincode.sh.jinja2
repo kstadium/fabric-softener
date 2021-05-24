@@ -1,0 +1,56 @@
+#!/bin/bash
+{% set msp_ids = [] %}
+{% for org in bld_peer_orgs  %}
+{{ msp_ids.append( '\''+org.msp_id+'.member\'' ) }}
+{% endfor %}
+{% set ordererorg = bld_orderer_orgs[0] %}
+{% set orderer = ordererorg.orderers[0] %}
+
+export CORE_PEER_TLS_ENABLED=true
+peer lifecycle chaincode package networks/fixed-asset.tar.gz --path src/fixed-asset/node --lang node --label fixed-asset
+
+{% for org in bld_peer_orgs %}
+export CORE_PEER_MSPCONFIGPATH=networks/crypto-config/peerOrganizations/{{ org.domain }}/users/Admin@{{ org.domain }}/msp
+export CORE_PEER_LOCALMSPID={{ org.msp_id }}
+export CORE_PEER_TLS_ROOTCERT_FILE=networks/crypto-config/peerOrganizations/{{ org.domain }}/users/Admin@{{ org.domain }}/tls/ca.crt
+export CORE_PEER_ADDRESS={{ org.peers[0].host_name }}.{{ org.domain }}:{{ org.peers[0].port }}
+
+if peer lifecycle chaincode querycommitted -C mychannel | grep -q fixed-asset; then
+    echo "chaincode has already been installed, approved, committed"
+    exit
+fi
+
+{% for peer in org.peers %}
+peer lifecycle chaincode install \
+    --peerAddresses {{ peer.host_name }}.{{ org.domain }}:{{ peer.port }} \
+    --tlsRootCertFiles networks/crypto-config/peerOrganizations/{{ org.domain }}/users/Admin@{{ org.domain }}/tls/ca.crt \
+    networks/fixed-asset.tar.gz 
+{% endfor %}
+
+if [ -z "$PKG_ID" ]
+then
+        peer lifecycle chaincode queryinstalled --tls \
+        --tlsRootCertFiles networks/crypto-config/peerOrganizations/{{ org.domain }}/users/Admin@{{ org.domain }}/tls/ca.crt > pkg_id.txt
+        res=$?
+        cat pkg_id.txt
+        PKG_ID=$(sed -n "/fixed-asset/{s/^Package ID: //; s/, Label:.*$//; p;}" pkg_id.txt)
+fi
+peer lifecycle chaincode approveformyorg -o {{ orderer.host_name }}.{{ ordererorg.domain }}:{{ orderer.port }} --ordererTLSHostnameOverride {{ orderer.host_name }}.{{ ordererorg.domain }}  --tls \
+        --cafile networks/crypto-config/ordererOrganizations/{{ ordererorg.domain }}/users/Admin@{{ ordererorg.domain }}/tls/ca.crt \
+        --signature-policy "OR({{ msp_ids|join(',') }})" --channelID mychannel --name fixed-asset --version v1.0.0 \
+        --package-id $PKG_ID --sequence 1 \
+        --collections-config src/fixed-asset/collection-config.json
+
+{% endfor %}
+
+
+
+peer lifecycle chaincode commit -o {{ orderer.host_name }}.{{ ordererorg.domain }}:{{ orderer.port }} --ordererTLSHostnameOverride {{ orderer.host_name }}.{{ ordererorg.domain }}  --tls \
+        --cafile networks/crypto-config/ordererOrganizations/{{ ordererorg.domain }}/users/Admin@{{ ordererorg.domain }}/tls/ca.crt \
+        --signature-policy "OR({{ msp_ids|join(',') }})" --channelID mychannel --name fixed-asset --version v1.0.0 \
+{% for org in bld_peer_orgs %}
+{% set peer = org.peers[0] %}
+        --peerAddresses {{ peer.host_name }}.{{ org.domain }}:{{ peer.port }} \
+        --tlsRootCertFiles networks/crypto-config/peerOrganizations/{{ org.domain }}/users/Admin@{{ org.domain }}/tls/ca.crt \
+{% endfor %}
+        --sequence 1 --collections-config src/fixed-asset/collection-config.json

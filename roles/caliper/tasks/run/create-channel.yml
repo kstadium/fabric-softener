@@ -1,0 +1,11 @@
+- name: create channel
+  block:
+    - name: run setup-channel.sh
+      command: bash -ic './setup-channel.sh'
+      args:
+        chdir: "{{ caliper_workspace | mandatory }}"
+      register: ps
+    - name: print result
+      debug: 
+        var: ps.stdout_lines
+  when: role != "worker"

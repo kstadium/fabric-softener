@@ -1,0 +1,6 @@
+---
+- name: include caliper task
+  include_tasks: "{{ item.key }}/main.yml"
+  vars:
+    - values: "{{ item.value }} "
+  with_dict: "{{ caliper_actions }}"

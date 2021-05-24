@@ -1,0 +1,16 @@
+[Unit]
+Description={{ service_description | mandatory }}
+After=network.target
+ConditionPathExists= {{ condition_path_exists }}
+
+[Service]
+EnvironmentFile=/etc/default/{{ service | mandatory }}
+ExecStart={{ service_start_cmd | mandatory }}
+ExecStop=/bin/kill -INT $MAINPID
+ExecReload=/bin/kill -TERM $MAINPID
+Restart={{ service_restart_option | default("no") }}
+{% if service_file_limit is defined %}
+LimitNOFILE={{ service_file_limit }}
+{% endif %}
+[Install] 
+WantedBy=multi-user.target

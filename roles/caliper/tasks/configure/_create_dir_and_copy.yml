@@ -1,0 +1,21 @@
+- name: create dir
+  file:
+    path: "{{ msp.dest }}/{{ org.domain }}/{{ msp.target }}"
+    state: directory
+  with_items:
+    - "{{ msp.orgs }}"
+  loop_control:
+    loop_var: org
+
+# - name: copy msp
+#   copy:
+#     src: "{{ msp.src }}/{{ item.domain }}/{{ msp.target }}"
+#     dest: "{{ msp.dest }}/{{ item.domain }}"
+#   with_items:
+#     - "{{ msp.orgs }}"
+
+- name: Copy msp
+  shell: "rsync -avz -e \"ssh -i {{ ansible_ssh_private_key_file }}\" {{ msp.src }}/{{ item.domain }}/{{ msp.target }} {{ ansible_user }}@{{ ansible_host }}:{{ msp.dest }}/{{ item.domain }}"
+  delegate_to: localhost
+  with_items:
+    - "{{ msp.orgs }}"

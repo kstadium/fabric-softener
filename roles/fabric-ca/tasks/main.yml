@@ -1,0 +1,7 @@
+---
+# tasks file for peer
+- name: include fabric-ca-server task
+  include_tasks: "{{ item.key }}/main.yml"
+  vars:
+    - values: "{{ item.value }} "
+  with_dict: "{{ ca_actions }}"

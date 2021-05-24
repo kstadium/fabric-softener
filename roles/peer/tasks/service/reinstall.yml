@@ -1,0 +1,9 @@
+- name: include service role - remove
+  include_role:
+    name: service
+    tasks_from: remove.yml
+
+- name: include service role - install
+  include_role:
+    name: service
+    tasks_from: install.yml

@@ -1,0 +1,40 @@
+#! /bin/bash
+{% set ordererorg = bld_orderer_orgs[0] %}
+{% set orderer = ordererorg.orderers[0] %}
+export CORE_PEER_TLS_ENABLED=true
+export CHANNEL_NAME=mychannel
+{% for org in bld_peer_orgs %}
+{% for peer in org.peers %}
+
+export CORE_PEER_ID={{ peer.host_name }}.{{ org.domain }}
+export CORE_PEER_ADDRESS={{ peer.host_name }}.{{ org.domain }}:{{ peer.port }}
+export CORE_PEER_MSPCONFIGPATH=networks/crypto-config/peerOrganizations/{{ org.domain }}/users/Admin@{{ org.domain }}/msp
+export CORE_PEER_LOCALMSPID={{ org.msp_id }}
+export CORE_PEER_TLS_CERT_FILE=networks/crypto-config/peerOrganizations/{{ org.domain }}/users/Admin@{{ org.domain }}/tls/server.crt
+export CORE_PEER_TLS_KEY_FILE=networks/crypto-config/peerOrganizations/{{ org.domain }}/users/Admin@{{ org.domain }}/tls/server.key
+export CORE_PEER_TLS_ROOTCERT_FILE=networks/crypto-config/peerOrganizations/{{ org.domain }}/users/Admin@{{ org.domain }}/tls/ca.crt
+if peer channel list | grep -q $CHANNEL_NAME; then
+    echo "channel has already been set up"
+    exit
+fi
+{% if org == bld_peer_orgs[0] and peer == org.peers[0] %} 
+peer channel create -c $CHANNEL_NAME --tls \
+    -f networks/$CHANNEL_NAME.tx \
+    -o {{ orderer.address }}:{{ orderer.port }} --ordererTLSHostnameOverride {{ orderer.host_name }}.{{ ordererorg.domain }} \
+    --cafile networks/crypto-config/ordererOrganizations/{{ ordererorg.domain }}/users/Admin@{{ ordererorg.domain }}/tls/ca.crt
+{% endif %}
+
+peer channel join --tls \
+    -b ./mychannel.block \
+    -o {{ orderer.address }}:{{ orderer.port }} --ordererTLSHostnameOverride {{ orderer.host_name }}.{{ ordererorg.domain }} \
+    --cafile networks/crypto-config/ordererOrganizations/{{ ordererorg.domain }}/users/Admin@{{ ordererorg.domain }}/tls/ca.crt
+
+{% if peer == org.peers[0] %} 
+peer channel update -c $CHANNEL_NAME --tls \
+    -f networks/{{ org.name | lower }}-anchor.tx \
+    -o {{ orderer.address }}:{{ orderer.port }}  --ordererTLSHostnameOverride {{ orderer.host_name }}.{{ ordererorg.domain }} \
+    --cafile networks/crypto-config/ordererOrganizations/{{ ordererorg.domain }}/users/Admin@{{ ordererorg.domain }}/tls/ca.crt
+    {% endif %}
+{% endfor %}
+{% endfor %}
+

@@ -1,0 +1,7 @@
+---
+- name: Delete fabric-ca-server db
+  become: true
+  file:
+    path: "{{ fabric_ca_home }}/fabric-ca-server.db"
+    state: absent
+

@@ -1,0 +1,26 @@
+{% if org.peers is defined %}
+    {% set org_type = "peerOrganizations" %}
+{% elif org.orderers is defined %}
+    {% set org_type = "ordererOrganizations"%}
+{% else%}
+    {{ "No peers or orderers in Org"/0 }}
+{% endif %}
+ca_{{ org.name | lower}}:
+    ansible_host: {{ org.ca.address }}
+    ca_hostname: ca.{{ org.domain }}
+    ca_port: {{ org.ca.port}}
+    ca_operation_port: {{ org.ca.op_port }}
+    ca_private_key: {{ msp_config_name }}/crypto-config/{{ org_type }}/{{ org.domain }}/ca/key.pem
+    ca_certificate: {{ msp_config_name }}/crypto-config/{{ org_type }}/{{ org.domain }}/ca/ca.{{ org.domain }}-cert.pem
+    ca_tls_key: {{ msp_config_name }}/crypto-config/{{ org_type }}/{{ org.domain }}/tlsca/key.pem
+    ca_tls_cert: {{ msp_config_name }}/crypto-config/{{ org_type }}/{{ org.domain }}/tlsca/tlsca.{{ org.domain }}-cert.pem
+    fabric_ca_home: /opt/hyperledger/fabric-ca/{{ org.name | lower }}
+    service: ca-{{ org.name | lower }} 
+    service_description: Fabric CA for {{ org.name | upper }}
+    service_variables:
+        - name: FABRIC_CA_HOME
+          value: /opt/hyperledger/fabric-ca/{{ org.name | lower }}
+    service_start_cmd: /usr/local/bin/fabric-ca-server start
+    condition_path_exists: /opt/hyperledger/fabric-ca/{{ org.name | lower }}/fabric-ca-server-config.yaml
+    ansible_ssh_user: {{ org.ca.ssh_user }}
+

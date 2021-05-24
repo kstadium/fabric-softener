@@ -1,0 +1,27 @@
+{%- set ns = namespace (remote_master = none) -%}
+{%- for caliper in bld_caliper.calipers %}
+{%- if caliper['role'] == 'master' %}
+   {% set ns.remote_master = caliper %}
+{%- endif %}                                                                                                                                                                   
+{%- endfor %}
+{{ ( '' if ns.remote_master is not none) | mandatory('No remote master caliper defined') }}
+{% for caliper in bld_caliper.calipers -%}
+{% if caliper.role == "worker" %}
+caliper_{{ caliper.address }}:
+  ansible_host: {{ caliper.address }}
+  caliper_workspace: {{ caliper.workspace | default("/opt/hyperledger/caliper") }}
+  type: {{ bld_caliper.type }}
+  role: {{ caliper.role }}
+  master_address: {{ ns.remote_master.address }}
+  mqtt_port: {{ caliper.mqtt_port | default(1883) }} 
+  ansible_ssh_user: {{ caliper.ssh_user }}
+{% endif %}
+{%- endfor -%}
+caliper_{{ ns.remote_master.address }}:
+  ansible_host: {{ ns.remote_master.address }}
+  caliper_workspace: {{ ns.remote_master.workspace | default("/opt/hyperledger/caliper") }}
+  type: {{ bld_caliper.type }}
+  role: {{ ns.remote_master.role }}
+  master_address: {{ ns.remote_master.address }}
+  mqtt_port: {{ ns.remote_master.mqtt_port | default(1883) }}
+  ansible_ssh_user: {{ ns.remote_master.ssh_user }}

@@ -1,0 +1,9 @@
+
+{% for caliper in bld_caliper.calipers %}
+caliper_{{ caliper.address }}:
+  ansible_host: {{ caliper.address }}
+  caliper_workspace: {{ caliper.workspace | default("/opt/hyperledger/caliper") }}
+  type: {{ bld_caliper.type }}
+  role: {{ caliper.role }}
+  ansible_ssh_user: {{ caliper.ssh_user }}
+{% endfor %}

@@ -1,0 +1,11 @@
+- hosts: calipers
+  gather_facts: false
+  roles:
+    - role: caliper
+      caliper_actions:
+        - run:
+          - create-channel
+          - install-chaincode
+          - launch
+      vars:
+        caliper_workspace: /opt/hyperledger/caliper

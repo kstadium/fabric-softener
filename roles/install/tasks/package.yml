@@ -1,0 +1,45 @@
+- name: Check Dist Version
+  shell: 
+    cmd: source /etc/os-release && echo $ID
+  args:
+    executable: /bin/bash
+
+  register: os_distribution
+
+- name: include package install task
+  include_tasks: "package-{{ os_distribution.stdout }}.yml"
+
+- name: Check go installed
+  shell: 
+    cmd: /bin/bash -ic 'which go'
+  register: go_exists
+  ignore_errors: true
+  
+- name: Install golang
+  block:
+    - name: Download the Go tarball - {{ go_tarball }}
+      get_url:
+        url: https://golang.org/dl/{{ go_tarball }}
+        dest: /tmp/{{ go_tarball }}
+        checksum: "{{ go_tarball_checksum }}"
+
+    - name: Extract the Go tarball - {{ go_tarball }}
+      become: true
+      unarchive:
+        src: /tmp/{{ go_tarball }}
+        dest: /usr/local
+        copy: no
+
+    - name: add go tree to .bashrc
+      blockinfile:
+        path: ~/.bashrc
+        marker: "### {mark} ANSIBLE MANAGED BLOCK - DOWNY ###"
+        block: >
+          export PATH=/usr/local/go/bin:~/go/bin:$PATH
+
+    - name: Remove the Go tarball
+      file:
+        path: /tmp/{{ go_tarball }}
+        state: absent
+
+  when: go_exists.rc != 0

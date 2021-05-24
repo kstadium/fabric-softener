@@ -1,0 +1,13 @@
+---
+## install git, make (build-essential or yum group install "Development Tools")
+
+# - name: print install target
+#   debug:
+#     msg: "{{ install_targets }}"
+
+# tasks file for installer
+- name: include installer task
+  include_tasks: "{{ install_target }}.yml"
+  with_items: "{{ install_targets }}"
+  loop_control:
+    loop_var: install_target

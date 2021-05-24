@@ -1,0 +1,10 @@
+---
+# defaults file for install
+go_tarball: "go1.14.12.linux-amd64.tar.gz"
+go_tarball_checksum: "sha256:fb26f951c88c0685d7df393611189c58e6eabd3c17bdaef37df11355ab8db9d3"
+go_version_target: "go version go1.14.12 linux/amd64"
+
+
+install_fabric_repo_url: "https://github.com/hyperledger/fabric.git"
+install_fabric_version: "v2.2.2"
+install_fabric_repo_name: "fabric"

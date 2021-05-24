@@ -1,0 +1,25 @@
+- name: check service exists
+  stat:
+    path: "/etc/systemd/system/{{ service | mandatory }}.service"
+  register: s
+
+- name: Disable {{ service }} service
+  become: true
+  systemd:
+    name: "{{ service }}"
+    enabled: no
+    state: stopped
+  ignore_errors: yes
+  when: s.stat.exists
+
+- name: Remove Service envvar File
+  become: true
+  file:
+    path: /etc/default/{{ service }}"
+    state: absent
+
+- name: Remove Service File
+  become: true
+  file:
+    path: "/etc/systemd/system/{{ service }}.service"
+    state: absent

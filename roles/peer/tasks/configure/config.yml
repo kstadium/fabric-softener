@@ -1,0 +1,6 @@
+- name: Create core.yaml
+  template:
+    src: "core.yaml-{{ fabric_version | default(2.2) }}.jinja2"
+    dest: "{{ fabric_cfg_path | mandatory }}/core.yaml"
+  vars:
+    operation_port: "{{ peer_operation_port | default(9443) }}"

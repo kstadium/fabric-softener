@@ -1,0 +1,7 @@
+---
+- name: Delete ledger
+  become: true
+  file:
+    path: "{{ ledger_path }}/"
+    state: absent
+

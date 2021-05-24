@@ -1,0 +1,19 @@
+- name: set crypto-config.yaml
+  template:
+    src: crypto-config.yaml.jinja
+    dest: "{{ playbook_dir }}/{{ msp_config_name }}/crypto-config.yaml"
+
+- name: cryptogen
+  shell : bin/cryptogen generate --config=./crypto-config.yaml
+  args:
+    chdir: "{{ playbook_dir }}/{{ msp_config_name }}"
+
+- name: rename priv key
+  shell: |
+    for KEY in $(find crypto-config -type f -name "*_sk"); do
+    KEY_DIR=$(dirname ${KEY})
+    mv ${KEY} ${KEY_DIR}/key.pem
+    chmod 666 ${KEY_DIR}/key.pem
+    done
+  args:
+    chdir: "{{ playbook_dir }}/{{ msp_config_name }}"

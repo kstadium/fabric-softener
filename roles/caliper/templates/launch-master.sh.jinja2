@@ -1,0 +1,6 @@
+#! /bin/bash
+npx caliper launch master \
+      --caliper-workspace ./ \
+      --caliper-benchconfig benchmarks/config.yaml \
+      --caliper-networkconfig networks/fabric-go-tls.yaml \
+      --Caliper-UserConfig ./caliper-config.yaml

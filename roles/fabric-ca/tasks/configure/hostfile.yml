@@ -1,0 +1,4 @@
+- name: include install role - hosts
+  include_role:
+    name: install
+    tasks_from: hosts.yml

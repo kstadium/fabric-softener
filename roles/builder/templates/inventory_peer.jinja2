@@ -1,0 +1,23 @@
+{% set bootstrap = "" %}
+{% for peer in org.peers %}
+{{ peer.host_name }}_{{ org.name | lower }}:
+    ansible_host: {{ peer.address }}
+    peer_id: {{ peer.host_name }}.{{ org.domain }}
+    peer_port: {{ peer.port }}
+    msp_id: {{ org.msp_id }}
+    msp_dir: {{ msp_config_name }}/crypto-config/peerOrganizations/{{ org.domain }}/peers/{{ peer.host_name}}.{{ org.domain }}/msp
+    tls_dir: {{ msp_config_name }}/crypto-config/peerOrganizations/{{ org.domain }}/peers/{{ peer.host_name}}.{{ org.domain }}/tls
+    peer_gossip_bootstrap: "[ {% for p in org.peers %}{{p.host_name}}.{{org.domain}}:{{p.port}}, {% endfor %}]"
+    {% if peer.anchor is true %}
+    peer_external_endpoint: {{ peer.host_name }}.{{ org.domain }}:{{ peer.port }}
+    {% endif %}
+    service: {{ peer.host_name | lower }}-{{ org.name | lower }}
+    service_description: Peer - {{ peer.host_name }}.{{ org.domain }}
+    service_start_cmd: /usr/local/bin/peer node start
+    condition_path_exists: /opt/hyperledger/fabric/{{ peer.host_name | lower }}.{{ org.domain | lower }}/core.yaml
+    service_variables:
+        - name: FABRIC_CFG_PATH
+          value: /opt/hyperledger/fabric/{{ peer.host_name | lower }}.{{ org.domain | lower }}
+    fabric_cfg_path: /opt/hyperledger/fabric/{{ peer.host_name | lower }}.{{ org.domain | lower }}
+    ansible_ssh_user: {{ peer.ssh_user }}
+{% endfor %}

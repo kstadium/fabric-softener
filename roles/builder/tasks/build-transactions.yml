@@ -1,0 +1,26 @@
+- name: Check if msp exists
+  stat:
+    path: "{{ playbook_dir }}/{{ msp_config_name }}/crypto-config"
+  register: msp_exists
+
+- name: Error - no msp
+  fail:
+    msg: crypto-config is not exists
+  when: not msp_exists.stat.exists 
+
+- name: set configtx.yaml
+  template:
+    src: configtx.yaml.jinja
+    dest: "{{ playbook_dir }}/{{ msp_config_name }}/configtx.yaml"
+
+- name: generate channel creation tx
+  shell: bin/configtxgen -profile SampleProfile -outputCreateChannelTx mychannel.tx -channelID mychannel
+  args:
+    chdir: "{{ playbook_dir }}/{{ msp_config_name }}"
+
+- name: generate anchorpeer update tx
+  shell: bin/configtxgen -profile SampleProfile -outputAnchorPeersUpdate {{ item.name | lower }}-anchor.tx -channelID mychannel -asOrg {{ item.name }}
+  args:
+    chdir: "{{ playbook_dir }}/{{ msp_config_name }}"
+  with_items:
+    - "{{ bld_peer_orgs }}"

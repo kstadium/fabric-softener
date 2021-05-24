@@ -1,0 +1,23 @@
+- name: launch worker
+  block:
+    - name: launch worker
+      command: bash -ic './launch-worker.sh'
+      args:
+        chdir: "{{ caliper_workspace | mandatory }}"
+      register: ps
+    - name: print result
+      debug: 
+        var: ps.stdout_lines
+  when: role == "worker"
+
+- name: launch master
+  block:
+    - name: send transaction with caliper
+      command: bash -ic './launch-master.sh'
+      args:
+        chdir: "{{ caliper_workspace | mandatory }}"
+      register: ps
+    - name: print result
+      debug: 
+        var: ps.stdout_lines
+  when: role != "worker"

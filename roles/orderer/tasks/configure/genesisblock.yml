@@ -1,0 +1,4 @@
+- name: Setup genesis block
+  copy:
+    src: "{{ playbook_dir }}/{{ msp_config_name }}/genesis.block"
+    dest: "{{ fabric_cfg_path }}/{{ msp_config_name }}/genesis.block"

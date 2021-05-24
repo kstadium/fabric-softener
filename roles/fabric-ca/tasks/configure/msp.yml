@@ -1,0 +1,21 @@
+- name: Make sure fabric-ca-server msp dir exists
+  file:
+    path: "{{ fabric_ca_home | mandatory }}/{{ '/'.join(ca_private_key.split('/')[:-1]) }}"
+    state: directory
+    recurse: yes
+
+- name: Make sure tlsca msp dir exists
+  file:
+    path: "{{ fabric_ca_home | mandatory }}/{{ '/'.join(ca_tls_key.split('/')[:-1]) }}"
+    state: directory
+    recurse: yes
+
+- name: Copy mspconfig
+  copy:
+        src: "{{ playbook_dir }}/{{ item.path }}"
+        dest: "{{ fabric_ca_home | mandatory }}/{{ item.path }}"
+  with_items:
+    - { path: "{{ ca_private_key }}" }
+    - { path: "{{ ca_certificate }}" }
+    - { path: "{{ ca_tls_key }}" }
+    - { path: "{{ ca_tls_cert }}" }

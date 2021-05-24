@@ -1,0 +1,39 @@
+- name: Ensure caliper workspace - chaincode
+  become: true
+  file:
+    path: "{{ caliper_workspace | mandatory }}/src"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0755
+    recurse: true
+
+- name: Setup chaincode source
+  block:
+    - name: Remove old chaincode source
+      shell:
+        cmd: rm fixed-asset -rf
+      args:
+        chdir: "{{ caliper_workspace | mandatory }}/src"
+    - name: Ensure caliper workspace - benchmarks
+      become: true
+      file:
+        path: "{{ caliper_workspace | mandatory }}/src"
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: 0755
+        recurse: true
+    - name: Copy chaincode source
+      copy: 
+        src: files/fixed-asset
+        dest: "{{ caliper_workspace }}/src"
+        mode: 0755
+    - name: npm install chaincode
+      shell:
+        cmd: /bin/bash -ic 'npm install'
+        chdir: "{{ caliper_workspace }}/src/fixed-asset/node"
+    - name: Setup collection config
+      template:
+        src: "collection-config.yaml.jinja2"
+        dest: "{{ caliper_workspace }}/src/fixed-asset/collection-config.json"

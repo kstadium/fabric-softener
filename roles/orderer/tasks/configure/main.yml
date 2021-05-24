@@ -1,0 +1,15 @@
+---
+- name: Ensure `FABRIC_CFG_PATH` directory
+  become: true
+  file:
+    path: "{{ fabric_cfg_path | mandatory }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0755
+    
+- name: orderer configure task
+  include_tasks: "{{ target }}.yml"
+  with_items: "{{ values }}"
+  loop_control:
+    loop_var: target

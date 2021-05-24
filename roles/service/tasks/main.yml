@@ -1,0 +1,4 @@
+- include_tasks: "{{ service_action }}.yml"
+  with_items: "{{ service_actions }}"
+  loop_control:
+    loop_var: service_action

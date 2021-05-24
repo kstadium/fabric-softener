@@ -1,0 +1,5 @@
+- name: Create {{ script }}.sh
+  template:
+    src: "{{ script }}.sh.jinja2"
+    dest: "{{ caliper_workspace | mandatory }}/{{ script }}.sh"
+    mode: 0755

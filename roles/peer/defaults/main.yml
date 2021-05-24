@@ -1,0 +1,3 @@
+---
+# defaults file for peer
+ledger_path: /var/hyperledger/peer/production

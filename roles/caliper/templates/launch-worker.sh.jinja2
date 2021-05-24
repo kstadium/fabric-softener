@@ -1,0 +1,8 @@
+#! /bin/bash
+workernum=`expr $(docker-compose ps | wc -l) - 2`
+if [ $numprocesses -le "{{ caliper_worker_num_each }}" ] ; then
+  exit
+else
+  docker-compose down
+  docker-compose up -d --scale caliper={{ caliper_worker_num_each }}
+fi

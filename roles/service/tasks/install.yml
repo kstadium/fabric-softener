@@ -1,0 +1,19 @@
+- name: Set service {{ service | mandatory }} env var file
+  become: true
+  template:
+    src: envvar.jinja2
+    dest: "/etc/default/{{ service }}"
+
+- name: Set service unit - {{ service }}
+  become: true
+  template:
+    src: template.service.jinja2
+    dest: "/etc/systemd/system/{{ service }}.service"
+  register: result
+
+- name: Enable {{ service }} service
+  become: true
+  systemd:
+    enabled: yes
+    daemon_reload: yes
+    name: "{{ service }}"

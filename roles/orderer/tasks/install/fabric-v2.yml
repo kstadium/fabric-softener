@@ -1,0 +1,6 @@
+- name: include install role - {{ install_fabric_repo_name }}
+  include_role:
+    name: install
+    tasks_from: fabric-v2.yml
+  vars:
+    install_fabric_target: orderer

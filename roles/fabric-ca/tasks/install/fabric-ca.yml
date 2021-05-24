@@ -1,0 +1,4 @@
+- name: include install role - fabric-ca
+  include_role:
+    name: install
+    tasks_from: fabric-ca.yml

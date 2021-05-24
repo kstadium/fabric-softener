@@ -1,0 +1,5 @@
+- name: orderer install task
+  include_tasks: "{{ target }}.yml"
+  with_items: "{{ values }}"
+  loop_control:
+    loop_var: target

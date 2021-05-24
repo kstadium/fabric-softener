@@ -1,0 +1,10 @@
+- name: Check Dist Version
+  shell: 
+    cmd: source /etc/os-release && echo $ID
+  args:
+    executable: /bin/bash
+
+  register: os_distribution
+
+- name: include docker compose install task
+  include_tasks: "dockercompose-{{ os_distribution.stdout }}.yml"

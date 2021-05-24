@@ -1,0 +1,57 @@
+---
+- name: Install caliper master
+  block:
+    - name: Include Install Role
+      include_role:
+        name: install
+        tasks_from: main.yml
+      vars:
+        install_targets: 
+          - node
+          - package
+          - hosts
+          - fabric-v2
+        install_fabric_target: peer
+
+    - name: Include Install Role
+      include_role:
+        name: install
+        tasks_from: main.yml
+      vars:
+        install_targets: 
+          - mqtt
+      when: type == "remote"
+
+    - name: Ensure caliper workspace
+      become: true
+      file:
+        path: "{{ caliper_workspace | mandatory }}"
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: 0755
+        recurse: true
+      
+    - name: npm init
+      shell:
+        cmd: /bin/bash -ic 'npm init -y'
+        chdir: "{{ caliper_workspace | mandatory }}"
+        
+    - name: npm install caliper
+      shell:
+        cmd: /bin/bash -ic 'npm install --only=prod @hyperledger/caliper-cli@{{ caliper_version | default(0.3.2) }}'
+        chdir: "{{ caliper_workspace | mandatory }}"
+  when: role != "worker"
+
+- name: Install caliper worker
+  block:
+    - name: Include Install Role
+      include_role:
+        name: install
+        tasks_from: main.yml
+      vars:
+        install_targets: 
+          - node
+          - package
+          - dockercompose
+  when: role == "worker"

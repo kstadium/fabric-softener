@@ -1,0 +1,64 @@
+- hosts: peers
+  gather_facts: false
+  roles:
+  - role: peer
+    vars:
+      peer_actions:
+        - service:
+          - stop
+        - clear:
+          - ledger
+        - configure:
+          - msp
+          - config
+          - hostfile
+        - service:
+          - reinstall
+          - start
+      # peer_concurrency: 2500
+      # metric_type: prometheus
+      # service_file_limit: 10000
+
+- hosts: orderers
+  gather_facts: false
+  roles:
+  - role: orderer
+    vars:
+      orderer_actions:
+        - service:
+          - stop
+        - clear:
+          - ledger
+        - configure:
+          - msp
+          - genesisblock
+          - config
+          - hostfile
+        - service:
+          - reinstall
+          - start
+      # metric_type: prometheus
+      # service_file_limit: 10000
+ 
+- hosts: cas
+  serial: 1
+  gather_facts: false
+  roles:
+    - role: fabric-ca
+      vars:
+        ca_actions:
+          - service:
+            - stop
+          - clear:
+            - db
+            - msp
+          - configure:
+            - config
+            - msp
+            - hostfile
+          - service:
+            - reinstall
+            - start
+        ca_tls_enabled: true        
+        ca_admin: admin
+        ca_adminpw: adminpw

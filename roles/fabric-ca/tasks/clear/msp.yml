@@ -1,0 +1,5 @@
+- name: Remove fabric-ca-server msp
+  become: true
+  file:
+    path: "{{ fabric_ca_home | mandatory }}/{{ msp_config_name }}"
+    state: absent

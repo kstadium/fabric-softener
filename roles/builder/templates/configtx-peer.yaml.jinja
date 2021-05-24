@@ -1,0 +1,36 @@
+{% for peerorg in (bld_peer_orgs) %}
+  - Name: {{ peerorg.name }}
+    SkipAsForeign: false
+    ID: {{ peerorg.msp_id }}
+    MSPDir: {{ peerorg.msp_dir | default("crypto-config/peerOrganizations/" + peerorg.domain + "/msp")}}
+    Policies:
+        Readers:
+            Type: Signature
+{% if peerorg.enable_node_ous %}
+            Rule: "OR('{{ peerorg.msp_id }}.admin', '{{ peerorg.msp_id }}.peer', '{{ peerorg.msp_id }}.client')"
+{% else %}
+            Rule: "OR('{{ peerorg.msp_id }}.member')"
+{% endif %}
+        Writers:
+            Type: Signature
+{% if peerorg.enable_node_ous %}
+            Rule: "OR('{{ peerorg.msp_id }}.admin', '{{ peerorg.msp_id }}.client')"
+{% else %}
+            Rule: "OR('{{ peerorg.msp_id }}.member')"
+{% endif %}
+        Admins:
+            Type: Signature
+            Rule: "OR('{{ peerorg.msp_id }}.admin')"
+        Endorsement:
+            Type: Signature
+            Rule: "OR('{{ peerorg.msp_id }}.peer')"
+    AnchorPeers:
+{% for peer in (peerorg.peers | mandatory) %}
+{% if 'anchor' in peer %}
+{% if peer.anchor %}
+      - Host: {{ peer.host_name }}.{{ peerorg.domain }}
+        Port: {{ peer.port }}
+{% endif %}
+{% endif %}
+{% endfor %}    
+{% endfor %}

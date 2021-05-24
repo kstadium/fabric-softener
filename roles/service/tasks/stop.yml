@@ -1,0 +1,14 @@
+- name: Check if service exists
+  command: systemctl cat "{{ service }}"
+  check_mode: no
+  register: service_exists
+  changed_when: False
+  failed_when: service_exists.rc not in [0, 1]
+
+- name: Stop service "{{ service }}"
+  become: true
+  systemd:
+    name: "{{ service }}"
+    state: stopped
+  ignore_errors: yes
+  when: service_exists.rc == 0

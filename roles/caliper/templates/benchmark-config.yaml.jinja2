@@ -1,0 +1,28 @@
+
+---
+test:
+  name: create-asset-size-ramp-levelDB
+  description: This is a duration based benchmark targeting a Hyperledger Fabric network with a LevelDB world state database using the `fixed-asset` NodeJS chaincode contract that is interacted with via
+    a Fabric-SDK-Node Gateway. Each test round invokes the `createAsset` method, with successive rounds increasing the bytesize of the asset
+    added into the world state database.
+  workers:
+    type: {{ type }}
+    number: {{ caliper_worker_num | default(1) }}
+  rounds:
+  - label: create-asset-8000-fixed-tps
+    description: Test a submitTransaction() Gateway method against the NodeJS `fixed-asset` Smart Contract method named `createAsset`, which inserts an asset of size 8000 bytes into the World State database at a fixed TPS rate.
+    chaincodeID: fixed-asset
+    txDuration: 10
+    rateControl:  { type: fixed-rate,  opts: { tps: {{caliper_target_tps}}} }
+    arguments:
+      chaincodeID: fixed-asset
+    callback: benchmarks/lib/create-asset.js
+  
+  # - label: create-private-asset-8000-fixed-tps
+  #   description: Test a submitTransaction() Gateway method against the NodeJS `fixed-asset` Smart Contract method named `createPrivateAsset`, which inserts an asset of size 8000 bytes into the Private Store at a fixed TPS rate.
+  #   chaincodeID: fixed-asset
+  #   txNumber: 100
+  #   rateControl:  { type: fixed-rate,  opts: { tps: 10} }
+  #   arguments:
+  #     chaincodeID: fixed-asset
+  #   callback: benchmarks/lib/create-private-asset.js

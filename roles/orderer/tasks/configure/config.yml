@@ -1,0 +1,6 @@
+- name: Create orderer.yaml
+  template:
+    src: orderer.yaml.jinja2
+    dest: "{{ fabric_cfg_path | mandatory }}/orderer.yaml"
+  vars:
+    operation_port: "{{ orderer_operation_port | default(9443) }}"

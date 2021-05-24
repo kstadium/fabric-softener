@@ -1,0 +1,9 @@
+---
+- name: get crypto binary
+  become: true
+  shell: curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+- name: chmod
+  become: true
+  shell:
+    cmd: chmod 755 /usr/local/bin/docker-compose

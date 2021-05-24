@@ -1,0 +1,24 @@
+- name: Clone Repository - {{ install_fabric_repo_url }}
+  git:
+    repo: "{{ install_fabric_repo_url }}"
+    dest: "/tmp/{{ install_fabric_repo_name }}"
+    key_file: "{{ install_fabric_key_file |default('')}}"
+    accept_hostkey: true    
+    version: "{{ install_fabric_version }}"
+    force : yes
+
+- name: make clean - {{ install_fabric_repo_name }}
+  shell:
+    cmd: /bin/bash -ic 'make clean'
+    chdir: /tmp/{{ install_fabric_repo_name }}
+
+- name: Build Binary - {{ install_fabric_repo_name }}
+  shell:
+    cmd: /bin/bash -ic 'make {{ install_fabric_target | default('native')}}'
+    chdir: /tmp/{{ install_fabric_repo_name }}  
+
+- name: Copy Binary to PATH - {{ install_fabric_repo_name }}
+  become: true
+  shell: 
+    cmd: cp ./build/bin/* /usr/local/bin
+    chdir: /tmp/{{ install_fabric_repo_name }}

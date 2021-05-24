@@ -1,0 +1,25 @@
+- name: Check nvm installed
+  shell: 
+    cmd: /bin/bash -ic 'nvm -v'
+  register: nvm_exists
+  ignore_errors: true
+
+- name: Install nvm
+  block:
+    - name: setup nvm
+      shell: "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash"
+  when: nvm_exists.rc != 0
+
+- name: Check node installed
+  shell:
+    cmd: /bin/bash -ic 'which node'
+  register: node_exists
+  ignore_errors: true
+
+- name: Install node
+  block:
+    - name: setup node v10
+      shell: 
+        cmd: /bin/bash -ic 'nvm install 10'
+  when: node_exists.rc != 0
+

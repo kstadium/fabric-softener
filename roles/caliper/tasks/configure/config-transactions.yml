@@ -1,0 +1,27 @@
+- name: Ensure caliper workspace - config-transactions
+  become: true
+  file:
+    path: "{{ caliper_workspace | mandatory }}/networks"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0755
+    recurse: true
+
+- name: Remove old transaction files
+  shell:
+    cmd: rm *.tx -f
+  args:
+    chdir: "{{ caliper_workspace | mandatory }}/networks/"
+
+- name: Copy channel creation transaction
+  copy:
+    src: "{{ playbook_dir }}/{{ msp_config_name }}/mychannel.tx"
+    dest: "{{ caliper_workspace | mandatory }}/networks/"
+
+- name: Copy anchorpeer update transaction
+  copy:
+    src: "{{ playbook_dir }}/{{ msp_config_name }}/{{ item.name | lower }}-anchor.tx"
+    dest: "{{ caliper_workspace | mandatory }}/networks/"
+  with_items:
+    - "{{ bld_peer_orgs }}"

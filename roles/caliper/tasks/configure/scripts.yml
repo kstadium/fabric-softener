@@ -1,0 +1,34 @@
+- name: Setup scripts for master
+  include_tasks: "_setup-scripts.yml"
+  loop:
+    - setup-channel
+    - setup-chaincode
+    - launch-master
+  loop_control:
+    loop_var: script
+  when: role != "worker"
+  
+- name: Create core.yaml
+  copy: 
+    src: files/core.yaml
+    dest: "{{ caliper_workspace }}"
+  when: role != "worker"
+
+- name: Setup scripts for worker
+  block:
+    - name: Remove exists compose services
+      shell:
+        cmd: /bin/bash -ic 'docker-compose down'
+        chdir: "{{ caliper_workspace | mandatory }}"
+      ignore_errors: true
+    - name: Setup docker-compose file   
+      template:
+        src: docker-compose.yaml.jinja2
+        dest: "{{ caliper_workspace | mandatory }}/docker-compose.yaml"
+    - name: Setup Scripts
+      include_tasks: "_setup-scripts.yml"
+      loop:
+        - launch-worker
+      loop_control:
+        loop_var: script
+  when: role == "worker"

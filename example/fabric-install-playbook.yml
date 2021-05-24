@@ -1,0 +1,38 @@
+- hosts: peers
+  gather_facts: false
+  roles:
+    - role: peer
+      vars:
+        peer_actions:
+          - service:
+            - stop
+          - install:
+            - package
+            - fabric-v2
+        install_fabric_version: v2.2.2
+
+- hosts: orderers
+  gather_facts: false
+  roles:
+    - role: orderer
+      vars:
+        orderer_actions:
+          - service:
+            - stop
+          - install:
+            - package
+            - fabric-v2
+        install_fabric_version: v2.2.2
+
+- hosts: cas
+  serial: 1
+  gather_facts: false
+  roles:
+    - role: fabric-ca
+      vars:
+        ca_actions:
+          - service:
+            - stop
+          - install:
+            - package
+            - fabric-ca

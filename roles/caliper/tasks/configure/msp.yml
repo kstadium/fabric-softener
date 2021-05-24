@@ -1,0 +1,28 @@
+- name: Ensure caliper workspace - msp
+  become: true
+  file:
+    path: "{{ caliper_workspace | mandatory }}/networks"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0755
+    recurse: true
+
+- name: Remove crypto-config
+  become: true
+  file:
+    path: "{{ caliper_workspace | mandatory }}/networks/crypto-config"
+    state: absent
+
+- name: Setup MSP
+  include_tasks: "_create_dir_and_copy.yml"
+  loop:
+    - { orgs: "{{ bld_peer_orgs }}", src: "{{ playbook_dir }}/{{ msp_config_name }}/crypto-config/peerOrganizations", target: "users", dest: "{{ caliper_workspace | mandatory }}/networks/crypto-config/peerOrganizations"}
+    - { orgs: "{{ bld_orderer_orgs }}", src: "{{ playbook_dir }}/{{ msp_config_name }}/crypto-config/ordererOrganizations", target: "users", dest: "{{ caliper_workspace | mandatory }}/networks/crypto-config/ordererOrganizations"}
+  loop_control:
+    loop_var: msp
+
+- name: chown crypto-config
+  shell:
+    cmd: chown -R {{ ansible_user }}:{{ ansible_user }} networks/crypto-config
+    chdir: "{{ caliper_workspace | mandatory }}"

@@ -1,0 +1,4 @@
+- name: include service role - stop
+  include_role:
+    name: service
+    tasks_from: stop.yml

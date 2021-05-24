@@ -1,0 +1,14 @@
+{%- set msps = [] -%}
+{%- for org in bld_peer_orgs  -%}
+{{ msps.append( '\'' + org.msp_id + '.member' + '\'' ) }}
+{%- endfor -%}
+[
+    {
+      "name": "CollectionOne",
+      "policy": "OR({{ msps|join(',') }})",
+      "requiredPeerCount": 0,
+      "maxPeerCount": 1,
+      "blockToLive": 0,
+      "memberOnlyRead": false
+    }
+  ]

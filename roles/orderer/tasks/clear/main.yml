@@ -1,0 +1,6 @@
+---
+- name: orderer clear task
+  include_tasks: "{{ target }}.yml"
+  with_items: "{{ values }}"
+  loop_control:
+    loop_var: target

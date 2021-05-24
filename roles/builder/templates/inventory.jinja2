@@ -1,0 +1,67 @@
+#jinja2:lstrip_blocks: True
+all:
+    vars:
+        ansible_ssh_user: {{ ansible_ssh_user }}
+        ansible_python_interpreter: /usr/bin/python
+        connection: ssh 
+        msp_config_name: {{ msp_config_name }}
+        host_file: |
+            {% for org in bld_peer_orgs %}
+                {% for peer in org.peers %}
+            {{ peer.address }} {{ peer.host_name }}.{{ org.domain }}
+                {% endfor %}
+            {{ org.ca.address }} ca.{{ org.domain }}
+            {% endfor %}
+            {% for org in bld_orderer_orgs %}
+                {% for orderer in org.orderers %}
+            {{ orderer.address }} {{ orderer.host_name }}.{{ org.domain }}
+                {% endfor %}
+            {{ org.ca.address }} ca.{{ org.domain }}
+            {% endfor %}
+        bld_peer_orgs: 
+        {% filter indent(width=12) %}
+            {{ bld_peer_orgs | to_nice_yaml( indent=2) }}
+        {%- endfilter %}
+        bld_orderer_orgs:
+        {% filter indent(width=12) %}
+            {{ bld_orderer_orgs | to_nice_yaml( indent=2) }}
+        {%- endfilter %}
+    children:
+        peers:
+            hosts:
+            {% filter indent(width=14, first=True) %}
+            {% for org in bld_peer_orgs %}
+            {% include './templates/inventory_peer.jinja2'  %}
+            {% endfor %}
+            {% endfilter %}
+        orderers:
+            hosts:
+            {% filter indent(width=14, first=True) %}
+            {% for org in bld_orderer_orgs %}
+            {% include './templates/inventory_orderer.jinja2'  %}
+            {% endfor %}
+            {% endfilter %}
+        cas:
+            hosts:
+            {% filter indent(width=14, first=True) %}
+            {% for org in bld_peer_orgs %}
+            {% include './templates/inventory_ca.jinja2'  %}
+            {% endfor %}
+            {% for org in bld_orderer_orgs %}
+            {% include './templates/inventory_ca.jinja2'  %}
+            {% endfor %}
+            {% endfilter %}
+        
+        calipers:
+            hosts:
+        {%- if bld_caliper.type == "local" %}
+            {% filter indent(width=14, first=True) %}
+            {% include './templates/inventory_caliper_local.jinja2'  %}
+            {% endfilter %}
+        {%- elif bld_caliper.type == "remote" %}
+            {% filter indent(width=14, first=True) %}
+            {% include './templates/inventory_caliper_remote.jinja2'  %}
+            {% endfilter %}
+        {% endif %}
+        
+        

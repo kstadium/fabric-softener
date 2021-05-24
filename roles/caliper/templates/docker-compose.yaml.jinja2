@@ -1,0 +1,26 @@
+version: '2'
+
+services:
+    caliper:
+        image: sukill/caliper:0.3.2
+        command: launch worker
+        restart: always
+        environment:
+        - CALIPER_BENCHCONFIG=benchmarks/config.yaml
+        - CALIPER_NETWORKCONFIG=networks/fabric-go-tls.yaml
+        - CALIPER_USERCONFIG=./caliper-config.yaml
+        volumes:
+        - {{ caliper_workspace | mandatory }}:/hyperledger/caliper/workspace/
+        extra_hosts:
+{% for org in bld_peer_orgs %}
+{% for peer in org.peers %}
+        - {{ peer.host_name }}.{{ org.domain }}:{{ peer.address }} 
+{% endfor %}
+        - ca.{{ org.domain }}:{{ org.ca.address }}
+{% endfor %}
+{% for org in bld_orderer_orgs %}
+{% for orderer in org.orderers %}
+        - {{ orderer.host_name }}.{{ org.domain }}:{{ orderer.address }}
+{% endfor %}
+        - ca.{{ org.domain }}:{{ org.ca.address }}
+{% endfor %}

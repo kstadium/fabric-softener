@@ -1,0 +1,110 @@
+Profiles:
+    SampleProfile:
+        Consortium: SampleConsortium
+        Application:
+            Organizations:
+{% filter indent(width=12) %}
+            {% include "./configtx-peer.yaml.jinja" %}
+{% endfilter %}
+            Capabilities:
+                V2_0: true
+            Policies:
+                LifecycleEndorsement:
+                    Type: ImplicitMeta
+                    Rule: "MAJORITY Endorsement"
+                Endorsement:
+                    Type: ImplicitMeta
+                    Rule: "MAJORITY Endorsement"
+                Readers:
+                    Type: ImplicitMeta
+                    Rule: "ANY Readers"
+                Writers:
+                    Type: ImplicitMeta
+                    Rule: "ANY Writers"
+                Admins:
+                    Type: ImplicitMeta
+                    Rule: "MAJORITY Admins"
+            ACLs: &ACLsDefault
+                _lifecycle/CheckCommitReadiness: /Channel/Application/Writers
+                _lifecycle/CommitChaincodeDefinition: /Channel/Application/Writers
+                _lifecycle/QueryChaincodeDefinition: /Channel/Application/Readers
+                _lifecycle/QueryChaincodeDefinitions: /Channel/Application/Readers
+                lscc/ChaincodeExists: /Channel/Application/Readers
+                lscc/GetDeploymentSpec: /Channel/Application/Readers
+                lscc/GetChaincodeData: /Channel/Application/Readers
+                lscc/GetInstantiatedChaincodes: /Channel/Application/Readers
+                qscc/GetChainInfo: /Channel/Application/Readers
+                qscc/GetBlockByNumber: /Channel/Application/Readers
+                qscc/GetBlockByHash: /Channel/Application/Readers
+                qscc/GetTransactionByID: /Channel/Application/Readers
+                qscc/GetBlockByTxID: /Channel/Application/Readers
+                cscc/GetConfigBlock: /Channel/Application/Readers
+                cscc/GetConfigTree: /Channel/Application/Readers
+                cscc/SimulateConfigTreeUpdate: /Channel/Application/Readers
+                peer/Propose: /Channel/Application/Writers
+                peer/ChaincodeToChaincode: /Channel/Application/Readers
+                event/Block: /Channel/Application/Readers
+                event/FilteredBlock: /Channel/Application/Readers
+        
+        Orderer:
+            OrdererType: etcdraft
+            EtcdRaft:
+                Consenters:
+{% for ordererorg in bld_orderer_orgs %}
+{% for orderer in ordererorg.orderers %}
+                  - Host: {{ orderer.host_name }}.{{ ordererorg.domain }}
+                    Port: {{ orderer.consenter_port }}
+                    ClientTLSCert: crypto-config/ordererOrganizations/{{ ordererorg.domain }}/orderers/{{ orderer.host_name }}.{{ ordererorg.domain }}/tls/server.crt
+                    ServerTLSCert: crypto-config/ordererOrganizations/{{ ordererorg.domain }}/orderers/{{ orderer.host_name }}.{{ ordererorg.domain }}/tls/server.crt
+{% endfor %}
+{% endfor %}
+            BatchTimeout: {{ configtx_batch_timeout | default("2s") }}
+            BatchSize:
+                MaxMessageCount: {{ configtx_max_message_count | default(500) }}
+                AbsoluteMaxBytes: {{ configtx_absoulte_max_bytes | default("10 MB")}}
+                PreferredMaxBytes: {{ configtx_preferred_max_bytes | default("2 MB") }}
+            Organizations:
+{% filter indent(width=12) %}
+            {% include "./configtx-orderer.yaml.jinja" %}
+{% endfilter %}
+            Policies:
+                Readers:
+                    Type: ImplicitMeta
+                    Rule: "ANY Readers"
+                Writers:
+                    Type: ImplicitMeta
+                    Rule: "ANY Writers"
+                Admins:
+                    Type: ImplicitMeta
+                    Rule: "MAJORITY Admins"
+                BlockValidation:
+                    Type: ImplicitMeta
+                    Rule: "ANY Writers"
+            Capabilities:
+                V2_0: true
+        Consortiums:
+            SampleConsortium:
+                Organizations:
+{% filter indent(width=16) %}
+                {% include "./configtx-peer.yaml.jinja" %}
+{% endfilter %}
+        Capabilities:
+            V2_0: true
+        Policies:
+            Readers:
+                Type: ImplicitMeta
+                Rule: "ANY Readers"
+            Writers:
+                Type: ImplicitMeta
+                Rule: "ANY Writers"
+            Admins:
+                Type: ImplicitMeta
+                Rule: "MAJORITY Admins"
+       
+
+
+
+
+
+
+

@@ -1,0 +1,25 @@
+OrdererOrgs:
+{% for org in ( bld_orderer_orgs ) %}
+  - Name: {{ org.name }}
+    Domain: {{ org.domain }}
+    EnableNodeOUs: {{ org.enable_node_ous }} 
+    Specs:
+{% for orderer in org.orderers %}
+      - Hostname: {{ orderer.host_name }}
+        CommonName: {{ orderer.common_name }}
+{% endfor %}
+{% endfor %}
+
+PeerOrgs:
+{% for org in (bld_peer_orgs ) %}
+  - Name: {{ org.name }}
+    Domain: {{ org.domain }}
+    EnableNodeOUs: {{ org.enable_node_ous }} 
+    Specs:
+{% for peer in org.peers %}
+      - Hostname: {{ peer.host_name }}
+        CommonName: {{ peer.common_name }}
+{% endfor %}
+    Users:
+      Count: {{ org.user_number}}
+{% endfor %}

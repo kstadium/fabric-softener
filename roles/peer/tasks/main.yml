@@ -1,0 +1,13 @@
+---
+# tasks file for peer
+# - name: include peer task
+#   include_tasks: "{{ peer_action }}.yml"
+#   with_items: "{{ peer_actions }}"
+#   loop_control:
+#     loop_var: peer_action
+
+- name: include peer task
+  include_tasks: "{{ item.key }}/main.yml"
+  vars:
+    - values: "{{ item.value }} "
+  with_dict: "{{ peer_actions }}"

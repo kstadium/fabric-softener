@@ -1,0 +1,34 @@
+- name: Ensure caliper workspace - benchmarks
+  become: true
+  file:
+    path: "{{ caliper_workspace | mandatory }}/benchmarks/lib"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0755
+    recurse: true
+
+- name: Setup caliper worker number - local
+  set_fact:
+    caliper_worker_num: "{{ caliper_worker_num_each }}"
+  when: type == "local"
+
+- name: Setup caliper worker number - remote
+  set_fact:
+    caliper_worker_num: "{{ caliper_worker_num_each  * ( groups.calipers | length -1 )}}"
+  when: type == "remote"
+
+- name: Create benchmark config
+  template:
+    src: "benchmark-config.yaml.jinja2"
+    dest: "{{ caliper_workspace | mandatory }}/benchmarks/config.yaml"
+
+- name: Create benchmark round callback
+  template:
+    src: "lib/create-asset.js.jinja2"
+    dest: "{{ caliper_workspace | mandatory }}/benchmarks/lib/create-asset.js"
+
+- name: Create benchmark round callback
+  template:
+    src: "lib/create-private-asset.js.jinja2"
+    dest: "{{ caliper_workspace | mandatory }}/benchmarks/lib/create-private-asset.js"

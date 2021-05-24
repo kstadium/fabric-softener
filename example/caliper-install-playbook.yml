@@ -1,0 +1,10 @@
+- hosts: calipers
+  gather_facts: false
+  roles:
+    - role: caliper
+      caliper_actions:
+        - install:
+      vars:
+        caliper_version: 0.3.2
+        caliper_workspace: /opt/hyperledger/caliper
+        install_fabric_target: peer

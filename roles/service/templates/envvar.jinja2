@@ -1,0 +1,3 @@
+{% for sv in (service_variables | default([])) %}
+{{ sv.name }}={{ sv.value }}
+{% endfor %}

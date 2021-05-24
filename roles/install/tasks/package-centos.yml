@@ -1,0 +1,41 @@
+- name: Install packages
+  become: true
+  yum: 
+    name:
+      - "@development"
+      - git
+    state: present
+    update_cache: yes
+
+- name: check docker installed
+  shell: "which docker"
+  register: docker_exists
+  ignore_errors: true
+
+- name: Install docker
+  block:
+    - name: install yum-utils
+      yum:
+        name:
+          - yum-utils
+        state: present
+    - name: setup repository  
+      shell: yum-config-manager \
+              --add-repo \
+              https://download.docker.com/linux/centos/docker-ce.repo
+    - name: install docker
+      yum:
+        name:
+          - docker-ce 
+          - docker-ce-cli
+          - containerd.io
+        state: present
+    - name: Start docker service
+      become: true
+      systemd:
+        name: "docker"
+        enabled: yes
+        state: started
+  when: docker_exists.rc != 0
+  become: true
+
