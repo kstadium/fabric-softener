@@ -1,4 +1,7 @@
 # Fabric Softener
+- Currently Supported
+    - Fabric v2.2.2
+    - Caliper v0.3.2
 
 # Prerequisite
 ## Local Host - where to install and run ansible
