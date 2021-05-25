@@ -21,7 +21,9 @@
 
 - name: Copy anchorpeer update transaction
   copy:
-    src: "{{ playbook_dir }}/{{ msp_config_name }}/{{ item.name | lower }}-anchor.tx"
+    src: "{{ playbook_dir }}/{{ msp_config_name }}/{{ org.name | lower }}-anchor.tx"
     dest: "{{ caliper_workspace | mandatory }}/networks/"
   with_items:
     - "{{ bld_peer_orgs }}"
+  loop_control:
+    loop_var: org
