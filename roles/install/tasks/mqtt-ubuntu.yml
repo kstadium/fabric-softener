@@ -1,4 +1,5 @@
-- name: Install mosquitto 
+- name: Install mosquitto
+  become: true
   apt:
     name:
       - mosquitto
