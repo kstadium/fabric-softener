@@ -1,6 +1,7 @@
 #! /bin/bash
 workernum=`expr $(docker-compose ps | wc -l) - 2`
 if [ $workernum -le "{{ caliper_worker_num_each }}" ] ; then
+  echo "$workernum of workers are running... reusing them instead of recreating"
   exit
 else
   docker-compose down
