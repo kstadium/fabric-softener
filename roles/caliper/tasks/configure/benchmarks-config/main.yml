@@ -1,0 +1,59 @@
+- name: Ensure caliper workspace - benchmarks
+  become: true
+  file:
+    path: "{{ caliper_workspace | mandatory }}/benchmarks"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0755
+    recurse: true
+
+- name: Setup caliper worker number - local
+  set_fact:
+    caliper_worker_num: "{{ caliper_config_worker_num_each }}"
+  when: type == "local"
+
+- name: Setup caliper worker number - remote
+  set_fact:
+    caliper_worker_num: "{{ caliper_config_worker_num_each  * ( groups.calipers | length -1 )}}"
+  when: type == "remote"
+
+- name: Create benchmark config
+  template:
+    src: "benchmark-config.yaml.jinja2"
+    dest: "{{ caliper_workspace | mandatory }}/benchmarks/config.yaml"
+
+- name: Setup scripts for master
+  block:
+    - name: Setup script
+      include_tasks: "_setup-scripts.yml"
+      loop:
+        - launch-master
+      loop_control:
+        loop_var: script
+      when: role != "worker"  
+    - name: Create core.yaml
+      copy: 
+        src: files/core.yaml
+        dest: "{{ caliper_workspace }}"
+  when: role != "worker"
+
+- name: Setup scripts for worker
+  block:
+    - name: Remove exists compose services
+      become: true
+      shell:
+        cmd: /bin/bash -ic 'docker-compose down'
+        chdir: "{{ caliper_workspace | mandatory }}"
+      ignore_errors: true
+    - name: Setup docker-compose file   
+      template:
+        src: docker-compose.yaml.jinja2
+        dest: "{{ caliper_workspace | mandatory }}/docker-compose.yaml"
+    - name: Setup script
+      include_tasks: "_setup-scripts.yml"
+      loop:
+        - launch-worker
+      loop_control:
+        loop_var: script
+  when: role == "worker"

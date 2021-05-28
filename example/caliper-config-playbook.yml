@@ -6,12 +6,8 @@
         caliper_actions:
           - configure:
               - hostfile
-              - benchmarks-config
               - chaincode
-              - config-transactions
-              - msp
               - networks-config
-              - scripts
               - caliper-config
-        caliper_config_sut_version: 2.1.0
         caliper_workspace: /opt/hyperledger/caliper
+        caliper_config_sut_version: 2.1.0        

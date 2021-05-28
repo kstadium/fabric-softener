@@ -1,0 +1,13 @@
+- name: Remove old chaincode source - {{ chaincode.name }}
+  file:
+    path: "{{ caliper_workspace | mandatory }}/src/{{ chaincode.name }}"
+    state: absent
+
+- name: Copy chaincode source - {{ chaincode.name }}
+  copy: 
+    src: files/{{ chaincode.name }}
+    dest: "{{ caliper_workspace }}/src"
+    mode: 0755
+
+- name: Get dependencies for chaincode - {{ chaincode.name }}
+  include_tasks: get_dependency/{{chaincode.lang}}.yml

@@ -1,13 +1,3 @@
-- name: Ensure caliper workspace - config-transactions
-  become: true
-  file:
-    path: "{{ caliper_workspace | mandatory }}/networks"
-    state: directory
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
-    mode: 0755
-    recurse: true
-
 - name: Remove old transaction files
   shell:
     cmd: rm *.tx -f

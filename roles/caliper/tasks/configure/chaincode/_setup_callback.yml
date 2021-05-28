@@ -1,0 +1,18 @@
+- name: Ensure caliper workspace - chaincode
+  become: true
+  file:
+    path: "{{ caliper_workspace | mandatory }}/benchmarks/lib/{{ chaincode.name }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0755
+    recurse: true
+
+- name: Create benchmark round callback
+  template:
+    src: "lib/{{ chaincode.name }}/{{ cb_name }}.js.jinja2"
+    dest: "{{ caliper_workspace | mandatory }}/benchmarks/lib/{{ chaincode.name }}/{{ cb_name }}.js"
+  with_items:
+    - "{{ chaincode.callbacks }}"
+  loop_control:
+    loop_var: cb_name

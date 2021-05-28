@@ -1,9 +1,9 @@
 #! /bin/bash
 workernum=`expr $(docker-compose ps | wc -l) - 2`
-if [ $workernum -le "{{ caliper_worker_num_each }}" ] ; then
+if [ $workernum == {{ caliper_config_worker_num_each }} ] ; then
   echo "$workernum of workers are running... reusing them instead of recreating"
   exit
 else
-  docker-compose down
-  docker-compose up -d --scale caliper={{ caliper_worker_num_each }}
+  docker-compose down 2> /dev/null
+  docker-compose up -d --scale caliper={{ caliper_config_worker_num_each }} 1> /dev/null
 fi

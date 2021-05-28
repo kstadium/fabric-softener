@@ -1,0 +1,35 @@
+- name: Ensure caliper workspace - src
+  become: true
+  run_once: true
+  file:
+    path: "{{ caliper_workspace | mandatory }}/src"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0755
+    recurse: true
+  when: role != "worker"
+
+- name: Copy chaincode source
+  include_tasks: _setup_source.yml
+  with_items: "{{ caliper_config_chaincodes }}"
+  loop_control:
+    loop_var: chaincode
+  when: role != "worker"
+
+- name: Setup benchmark callback
+  include_tasks: _setup_callback.yml
+  with_items: "{{ caliper_config_chaincodes }}"
+  loop_control:
+    loop_var: chaincode
+  when: chaincode.callbacks is defined
+
+- name: Setup chaincode install script
+  include_tasks: _setup_script.yml
+  with_items: "{{ caliper_config_chaincodes }}"
+  loop_control:
+    loop_var: chaincode
+  when: role != "worker"
+
+
+

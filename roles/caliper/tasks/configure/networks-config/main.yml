@@ -1,0 +1,26 @@
+- name: Ensure caliper workspace - newtorks
+  become: true
+  file:
+    path: "{{ caliper_workspace | mandatory }}/networks"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0755
+    recurse: true
+
+- name: Create network config
+  template:
+    src: "network-config.yaml.jinja2"
+    dest: "{{ caliper_workspace | mandatory }}/networks/fabric-go-tls.yaml"
+
+- name: copy msp
+  include_tasks: msp/main.yml
+
+- name: copy network setup transaction
+  include_tasks: _copy_network_tx.yml
+
+- name: Create setup-channel.sh
+  template:
+    src: "setup-channel.sh.jinja2"
+    dest: "{{ caliper_workspace | mandatory }}/setup-channel.sh"
+    mode: 0755

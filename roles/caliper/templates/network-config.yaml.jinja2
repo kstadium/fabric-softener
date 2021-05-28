@@ -62,10 +62,11 @@ channels:
 {% endfor %}
 {% endfor %}
     chaincodes:
-    - id: fixed-asset
+{% for cc in caliper_config_chaincodes %}
+    - id: {{ cc.name }}
       version: v1.0.0
-      language: node
-      path: api/fixed-asset/node
+      language: {{ cc.lang }}
+{% endfor %}
 
 organizations:
 {% for org in bld_peer_orgs %}

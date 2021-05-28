@@ -2,3 +2,29 @@
 # defaults file for caliper
 force-reinstall: true
 service: caliper
+
+caliper_config_worker_num_each: 1
+
+caliper_config_chaincodes:
+  - name: fixed-asset
+    lang: node
+    collection_exists: true
+    callbacks:
+      - create-asset
+      - create-private-asset
+  - name: simple
+    lang: golang
+    collection_exists: false
+    callbacks:
+      - open
+      - query
+      - transfer
+  - name: smallbank
+    lang: golang
+    collection_exists: false
+    callbacks:
+      - query
+      - smallbankOperations
+  - name: auction
+    lang: golang
+    collection_exists: true

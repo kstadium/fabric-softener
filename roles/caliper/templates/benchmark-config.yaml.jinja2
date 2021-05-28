@@ -9,20 +9,16 @@ test:
     type: {{ type }}
     number: {{ caliper_worker_num | default(1) }}
   rounds:
-  - label: create-asset-8000-fixed-tps
-    description: Test a submitTransaction() Gateway method against the NodeJS `fixed-asset` Smart Contract method named `createAsset`, which inserts an asset of size 8000 bytes into the World State database at a fixed TPS rate.
-    chaincodeID: fixed-asset
+{% for round in caliper_config_rounds %}
+{% for callback in round.callbacks %}
+  - label: {{ round.chaincode_id }}-{{ callback.name }}-{{round.target_tps}}tps
+    chaincodeID: {{ round.chaincode_id }}
     txDuration: 10
-    rateControl:  { type: fixed-rate,  opts: { tps: {{caliper_target_tps}}} }
+    rateControl:  { type: {{round.rate_control_type}},  opts: { tps: {{round.target_tps}}} }
     arguments:
-      chaincodeID: fixed-asset
-    callback: benchmarks/lib/create-asset.js
-  
-  # - label: create-private-asset-8000-fixed-tps
-  #   description: Test a submitTransaction() Gateway method against the NodeJS `fixed-asset` Smart Contract method named `createPrivateAsset`, which inserts an asset of size 8000 bytes into the Private Store at a fixed TPS rate.
-  #   chaincodeID: fixed-asset
-  #   txNumber: 100
-  #   rateControl:  { type: fixed-rate,  opts: { tps: 10} }
-  #   arguments:
-  #     chaincodeID: fixed-asset
-  #   callback: benchmarks/lib/create-private-asset.js
+{% for key in callback.arguments.keys() %}
+      {{ key }}: {{ callback.arguments[key] }}
+{% endfor %}
+    callback: benchmarks/lib/{{ round.chaincode_id }}/{{ callback.name }}.js
+{% endfor %}
+{% endfor %}
