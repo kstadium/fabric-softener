@@ -6,13 +6,8 @@
         caliper_actions:
           - configure:
               - hostfile
-              - benchmarks-config
               - chaincode
-              - config-transactions
-              - msp
               - networks-config
-              - scripts
-        caliper_sut_version: 2.1.0
-        caliper_target_tps: 1000
-        caliper_worker_num_each: 5
+              - caliper-config
         caliper_workspace: /opt/hyperledger/caliper
+        caliper_config_sut_version: 2.1.0        

@@ -1,0 +1,6 @@
+- name: install chaincode
+  include_tasks: install.yml
+  loop: "{{ caliper_run_install_chaincodes }}"
+  loop_control:
+    loop_var: chaincode_name
+  when: role != "worker"

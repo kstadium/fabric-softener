@@ -1,0 +1,5 @@
+- name: Setup install-{{ chaincode.name }}.sh
+  template:
+    src: "setup-chaincode.sh.jinja2"
+    dest: "{{ caliper_workspace | mandatory }}/install-{{ chaincode.name }}.sh"
+    mode: 0755

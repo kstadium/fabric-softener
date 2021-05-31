@@ -15,7 +15,9 @@
 #     - "{{ msp.orgs }}"
 
 - name: Copy msp
-  shell: "rsync -avz -e \"ssh -i {{ ansible_ssh_private_key_file }}\" {{ msp.src }}/{{ item.domain }}/{{ msp.target }} {{ ansible_user }}@{{ ansible_host }}:{{ msp.dest }}/{{ item.domain }}"
+  shell: "rsync -avz -e \"ssh -i {{ ansible_ssh_private_key_file }}\" {{ msp.src }}/{{ org.domain }}/{{ msp.target }} {{ ansible_user }}@{{ ansible_host }}:{{ msp.dest }}/{{ org.domain }}"
   delegate_to: localhost
   with_items:
     - "{{ msp.orgs }}"
+  loop_control:
+    loop_var: org

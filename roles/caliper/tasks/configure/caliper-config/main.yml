@@ -1,0 +1,4 @@
+- name: Create caliper-config.yaml
+  template:
+    src: "caliper-config.yaml.jinja2"
+    dest: "{{ caliper_workspace | mandatory }}/caliper-config.yaml"

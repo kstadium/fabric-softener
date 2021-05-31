@@ -1,13 +1,17 @@
 - name: launch worker
   block:
     - name: launch worker
+      become: true
       command: bash -ic './launch-worker.sh'
       args:
         chdir: "{{ caliper_workspace | mandatory }}"
       register: ps
     - name: print result
       debug: 
-        var: ps.stdout_lines
+        var: ps.stdout
+    - name: print err
+      debug: 
+        var: ps.stderr
   when: role == "worker"
 
 - name: launch master

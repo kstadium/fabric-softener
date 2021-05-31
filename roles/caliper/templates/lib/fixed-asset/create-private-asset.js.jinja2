@@ -4,30 +4,12 @@
 
 'use strict';
 
-// Investigate submitTransaction() using network model to create an asset of specific size in the registry
-// - label: create-asset-100
-//     chaincodeID: fixed-asset
-//     txNumber:
-//     - 1000
-//     rateControl:
-//     - type: fixed-rate
-//       opts:
-//         tps: 50
-//     arguments:
-//       chaincodeID: fixed-asset | fixed-asset-base
-//       bytesize: 100
-//     callback: benchmark/network-model/lib/create-asset.js
+module.exports.info  = 'Creating private Asset in Registry';
 
-module.exports.info  = 'Creating Asset in Registry';
-
-let chaincodeID;
-// const appmetrics = require('appmetrics');
-// require('appmetrics-dash').monitor({appmetrics: appmetrics});
-// appmetrics.enable('profiling');
+const chaincodeID = 'fixed-asset';
 const bytes = (s) => {
     return ~-encodeURI(s).split(/%..|./).length;
 };
-
 let txIndex = 0;
 let clientIdx;
 let asset;
@@ -42,7 +24,6 @@ module.exports.init = async function(blockchain, context, args) {
     bc = blockchain;
     contx = context;
     clientIdx = context.clientIdx;
-    chaincodeID = args.chaincodeID ? args.chaincodeID : 'fixed-asset';
     bytesize = args.bytesize;
 
     asset = {docType: chaincodeID, content: ''};
@@ -53,15 +34,18 @@ module.exports.init = async function(blockchain, context, args) {
 module.exports.run = function() {
     const uuid =  "client" + clientIdx + '_' + txIndex.toString(16);
     asset.uuid = uuid;
-    asset.content = txIndex.toString(16);
+    asset.content = "private_" + txIndex.toString(16);
     txIndex++;
+    
     const myArgs = {
-        chaincodeFunction: 'createAsset',
-        chaincodeArguments: [uuid, JSON.stringify(asset)],
-        invokerIdentity: clients[txIndex%3]
-    };
+        chaincodeFunction: 'createPrivateAsset',
+        chaincodeArguments: [uuid],
+        transientMap: {content: JSON.stringify(asset)},
+        invokerIdentity: clients[txIndex%clients.length]
+    }
+
     return bc.bcObj.invokeSmartContract(contx, chaincodeID, undefined, myArgs);
-};
+}
 
 module.exports.end = function() {
     return Promise.resolve();

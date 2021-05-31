@@ -1,0 +1,10 @@
+- name: npm install chaincode
+  shell:
+    cmd: /bin/bash -ic 'npm install'
+    chdir: "{{ caliper_workspace }}/src/{{ chaincode.name }}/node"
+
+- name: Setup collection config
+  template:
+    src: "collection-config.yaml.jinja2"
+    dest: "{{ caliper_workspace }}/src/{{ chaincode.name }}/collection-config.json"
+  when: chaincode.collection_exists

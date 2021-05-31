@@ -4,12 +4,16 @@
 
 'use strict';
 
-module.exports.info  = 'Creating private Asset in Registry';
+module.exports.info  = 'Creating Asset in Registry';
 
-const chaincodeID = 'fixed-asset';
+let chaincodeID;
+// const appmetrics = require('appmetrics');
+// require('appmetrics-dash').monitor({appmetrics: appmetrics});
+// appmetrics.enable('profiling');
 const bytes = (s) => {
     return ~-encodeURI(s).split(/%..|./).length;
 };
+
 let txIndex = 0;
 let clientIdx;
 let asset;
@@ -24,6 +28,7 @@ module.exports.init = async function(blockchain, context, args) {
     bc = blockchain;
     contx = context;
     clientIdx = context.clientIdx;
+    chaincodeID = args.chaincodeID ? args.chaincodeID : 'fixed-asset';
     bytesize = args.bytesize;
 
     asset = {docType: chaincodeID, content: ''};
@@ -34,18 +39,15 @@ module.exports.init = async function(blockchain, context, args) {
 module.exports.run = function() {
     const uuid =  "client" + clientIdx + '_' + txIndex.toString(16);
     asset.uuid = uuid;
-    asset.content = "private_" + txIndex.toString(16);
-    txIndex++;
-    
+    asset.content = txIndex.toString(16);
     const myArgs = {
-        chaincodeFunction: 'createPrivateAsset',
-        chaincodeArguments: [uuid],
-        transientMap: {content: JSON.stringify(asset)},
-        invokerIdentity: clients[txIndex%3]
-    }
-
+        chaincodeFunction: 'createAsset',
+        chaincodeArguments: [uuid, JSON.stringify(asset)],
+        invokerIdentity: clients[txIndex%clients.length]
+    };
+    txIndex++;
     return bc.bcObj.invokeSmartContract(contx, chaincodeID, undefined, myArgs);
-}
+};
 
 module.exports.end = function() {
     return Promise.resolve();
