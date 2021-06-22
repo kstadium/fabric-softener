@@ -5,8 +5,8 @@
     peer_id: {{ peer.host_name }}.{{ org.domain }}
     peer_port: {{ peer.port }}
     msp_id: {{ org.msp_id }}
-    msp_dir: {{ msp_config_name }}/crypto-config/peerOrganizations/{{ org.domain }}/peers/{{ peer.host_name}}.{{ org.domain }}/msp
-    tls_dir: {{ msp_config_name }}/crypto-config/peerOrganizations/{{ org.domain }}/peers/{{ peer.host_name}}.{{ org.domain }}/tls
+    msp_dir: {{ bld_msp_config_name }}/crypto-config/peerOrganizations/{{ org.domain }}/peers/{{ peer.host_name}}.{{ org.domain }}/msp
+    tls_dir: {{ bld_msp_config_name }}/crypto-config/peerOrganizations/{{ org.domain }}/peers/{{ peer.host_name}}.{{ org.domain }}/tls
     peer_gossip_bootstrap: "[ {% for p in org.peers %}{{p.host_name}}.{{org.domain}}:{{p.port}}, {% endfor %}]"
     {% if peer.anchor is true %}
     peer_external_endpoint: {{ peer.host_name }}.{{ org.domain }}:{{ peer.port }}

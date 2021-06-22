@@ -4,23 +4,23 @@
   block:
     - name: Clear directory
       file:
-        path: "{{ playbook_dir }}/{{ msp_config_name }}"
+        path: "{{ playbook_dir }}/{{ bld_msp_config_name }}"
         state: absent
       when: force_rebuild
     - name: Create directory if not exists
       file:
-        path: "{{ playbook_dir }}/{{ msp_config_name }}"
+        path: "{{ playbook_dir }}/{{ bld_msp_config_name }}"
         state: directory
 
 - name: Check if crypto binary exists
   stat:
-    path: "{{ playbook_dir }}/{{ msp_config_name }}/crypto-config"
+    path: "{{ playbook_dir }}/{{ bld_msp_config_name }}/crypto-config"
   register: crypto_bin_exists
   
 - name: get crypto binary
   shell: curl -sSL http://bit.ly/2ysbOFE | bash -s -- 2.2.2 2.2.2 -ds
   args:
-    chdir: "{{ playbook_dir }}/{{ msp_config_name }}"
+    chdir: "{{ playbook_dir }}/{{ bld_msp_config_name }}"
   when: not crypto_bin_exists.stat.exists
      
 - name: include task

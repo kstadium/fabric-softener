@@ -18,7 +18,7 @@
 - name: Remove mspconfig
   become: true
   file:
-    path: "{{ fabric_ca_home | mandatory }}/{{ msp_config_name }}"
+    path: "{{ fabric_ca_home | mandatory }}/{{ bld_msp_config_name }}"
     state: absent
 
 - name: Make sure ca msp dir exists

@@ -3,9 +3,9 @@
     ansible_host: {{ orderer.address }}
     orderer_id: {{ orderer.host_name }}.{{ org.domain }}
     msp_id: {{ org.msp_id }}
-    msp_dir: {{ msp_config_name }}/crypto-config/ordererOrganizations/{{ org.domain }}/orderers/{{ orderer.host_name}}.{{ org.domain }}/msp
-    tls_dir: {{ msp_config_name }}/crypto-config/ordererOrganizations/{{ org.domain }}/orderers/{{ orderer.host_name}}.{{ org.domain }}/tls
-    genesis_block_path: {{ msp_config_name }}/genesis.block
+    msp_dir: {{ bld_msp_config_name }}/crypto-config/ordererOrganizations/{{ org.domain }}/orderers/{{ orderer.host_name}}.{{ org.domain }}/msp
+    tls_dir: {{ bld_msp_config_name }}/crypto-config/ordererOrganizations/{{ org.domain }}/orderers/{{ orderer.host_name}}.{{ org.domain }}/tls
+    genesis_block_path: {{ bld_msp_config_name }}/genesis.block
     orderer_port: {{ orderer.port }}
     orderer_consenter_port: {{ orderer.consenter_port }}
     service: {{ orderer.host_name | lower }}-{{ org.name | lower }}

@@ -1,6 +1,6 @@
 - name: Check if msp exists
   stat:
-    path: "{{ playbook_dir }}/{{ msp_config_name }}/crypto-config"
+    path: "{{ playbook_dir }}/{{ bld_msp_config_name }}/crypto-config"
   register: msp_exists
 
 - name: Error - no msp
@@ -11,9 +11,9 @@
 - name: set configtx.yaml
   template:
     src: configtx.yaml.jinja
-    dest: "{{ playbook_dir }}/{{ msp_config_name }}/configtx.yaml"
+    dest: "{{ playbook_dir }}/{{ bld_msp_config_name }}/configtx.yaml"
     
 - name: generate genesisblock
   shell : bin/configtxgen -profile SampleProfile -outputBlock genesis.block -channelID syschannel
   args:
-    chdir: "{{ playbook_dir }}/{{ msp_config_name }}"
+    chdir: "{{ playbook_dir }}/{{ bld_msp_config_name }}"

@@ -4,7 +4,7 @@ all:
         ansible_ssh_user: {{ ansible_ssh_user }}
         ansible_python_interpreter: /usr/bin/python
         connection: ssh 
-        msp_config_name: {{ msp_config_name }}
+        bld_msp_config_name: {{ bld_msp_config_name }}
         host_file: |
             {% for org in bld_peer_orgs %}
                 {% for peer in org.peers %}

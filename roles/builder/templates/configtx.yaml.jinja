@@ -58,11 +58,11 @@ Profiles:
                     ServerTLSCert: crypto-config/ordererOrganizations/{{ ordererorg.domain }}/orderers/{{ orderer.host_name }}.{{ ordererorg.domain }}/tls/server.crt
 {% endfor %}
 {% endfor %}
-            BatchTimeout: {{ configtx_batch_timeout | default("2s") }}
+            BatchTimeout: {{ bld_configtx_batch_timeout | default("2s") }}
             BatchSize:
-                MaxMessageCount: {{ configtx_max_message_count | default(500) }}
-                AbsoluteMaxBytes: {{ configtx_absoulte_max_bytes | default("10 MB")}}
-                PreferredMaxBytes: {{ configtx_preferred_max_bytes | default("2 MB") }}
+                MaxMessageCount: {{ bld_configtx_max_message_count | default(500) }}
+                AbsoluteMaxBytes: {{ bld_configtx_absoulte_max_bytes | default("10 MB")}}
+                PreferredMaxBytes: {{ bld_configtx_preferred_max_bytes | default("2 MB") }}
             Organizations:
 {% filter indent(width=12) %}
             {% include "./configtx-orderer.yaml.jinja" %}

@@ -80,14 +80,14 @@ peer:
         enabled: true
         clientAuthRequired: false
         cert:
-            file: {{ msp_config_name }}/tls/server.crt
+            file: {{ bld_msp_config_name }}/tls/server.crt
         key:
-            file: {{ msp_config_name }}/tls/server.key
+            file: {{ bld_msp_config_name }}/tls/server.key
         rootcert:
-            file: {{ msp_config_name }}/tls/ca.crt
+            file: {{ bld_msp_config_name }}/tls/ca.crt
         clientRootCAs:
             files:
-                - {{ msp_config_name }}/tls/ca.crt
+                - {{ bld_msp_config_name }}/tls/ca.crt
         clientKey:
             file:
         clientCert:
@@ -98,7 +98,7 @@ peer:
     
 {% include './templates/' + (bccsp_type | default('sw')) + '.yaml.jinja2' %}
 
-    mspConfigPath: {{ msp_config_name }}/msp
+    mspConfigPath: {{ bld_msp_config_name }}/msp
     localMspId: {{ msp_id | mandatory }}
     client:
         connTimeout: 3s
@@ -264,7 +264,7 @@ operations:
 #
 ###############################################################################
 metrics:
-    provider: {{ metric_type | default('disabled') }}
+    provider: {{ peer_metric_type | default('disabled') }}
     statsd:
             network: udp
             address: 127.0.0.1:8125

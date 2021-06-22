@@ -3,4 +3,4 @@
 - name: Create inventory
   template:
     src: "inventory.jinja2"
-    dest: "{{ msp_config_name }}/inventory.yaml"
+    dest: "{{ bld_msp_config_name }}/inventory.yaml"

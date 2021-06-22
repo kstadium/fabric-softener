@@ -7,8 +7,8 @@
 - name: Setup MSP
   include_tasks: "_create_dir_and_copy.yml"
   loop:
-    - { orgs: "{{ bld_peer_orgs }}", src: "{{ playbook_dir }}/{{ msp_config_name }}/crypto-config/peerOrganizations", target: "users", dest: "{{ caliper_workspace | mandatory }}/networks/crypto-config/peerOrganizations"}
-    - { orgs: "{{ bld_orderer_orgs }}", src: "{{ playbook_dir }}/{{ msp_config_name }}/crypto-config/ordererOrganizations", target: "users", dest: "{{ caliper_workspace | mandatory }}/networks/crypto-config/ordererOrganizations"}
+    - { orgs: "{{ bld_peer_orgs }}", src: "{{ playbook_dir }}/{{ bld_msp_config_name }}/crypto-config/peerOrganizations", target: "users", dest: "{{ caliper_workspace | mandatory }}/networks/crypto-config/peerOrganizations"}
+    - { orgs: "{{ bld_orderer_orgs }}", src: "{{ playbook_dir }}/{{ bld_msp_config_name }}/crypto-config/ordererOrganizations", target: "users", dest: "{{ caliper_workspace | mandatory }}/networks/crypto-config/ordererOrganizations"}
   loop_control:
     loop_var: msp
 

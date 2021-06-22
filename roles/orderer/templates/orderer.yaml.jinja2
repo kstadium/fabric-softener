@@ -14,10 +14,10 @@ General:
 
     TLS:
         Enabled: true
-        PrivateKey: {{ msp_config_name }}/tls/server.key
-        Certificate: {{ msp_config_name }}/tls/server.crt
+        PrivateKey: {{ bld_msp_config_name }}/tls/server.key
+        Certificate: {{ bld_msp_config_name }}/tls/server.crt
         RootCAs:
-          - {{ msp_config_name }}/tls/ca.crt
+          - {{ bld_msp_config_name }}/tls/ca.crt
         ClientAuthRequired: false
         ClientRootCAs:
     Keepalive:
@@ -26,18 +26,18 @@ General:
         ServerTimeout: 20s
     Cluster:
         SendBufferSize: 10
-        ClientCertificate: {{ msp_config_name }}/tls/server.crt
-        ClientPrivateKey: {{ msp_config_name }}/tls/server.key
+        ClientCertificate: {{ bld_msp_config_name }}/tls/server.crt
+        ClientPrivateKey: {{ bld_msp_config_name }}/tls/server.key
 
         ListenPort: {{ orderer_consenter_port | default(7056) }}
         ListenAddress: {{ orderer_id | mandatory }}
-        ServerCertificate: {{ fabric_cfg_path | mandatory }}/{{ msp_config_name }}/tls/server.crt
-        ServerPrivateKey: {{ fabric_cfg_path | mandatory }}/{{ msp_config_name }}/tls/server.key
+        ServerCertificate: {{ fabric_cfg_path | mandatory }}/{{ bld_msp_config_name }}/tls/server.crt
+        ServerPrivateKey: {{ fabric_cfg_path | mandatory }}/{{ bld_msp_config_name }}/tls/server.key
     BootstrapMethod: file
 
     BootstrapFile: {{ genesis_block_path }}
 
-    LocalMSPDir: {{ msp_config_name }}/msp
+    LocalMSPDir: {{ bld_msp_config_name }}/msp
 
     LocalMSPID: {{ msp_id | mandatory }}
 
@@ -157,7 +157,7 @@ Operations:
 #
 ################################################################################
 Metrics:
-    provider: {{ metric_type | default('disabled')}}
+    provider: {{ orderer_metric_type | default('disabled')}}
 
     Statsd:
       Network: udp
