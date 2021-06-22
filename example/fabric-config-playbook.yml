@@ -15,9 +15,6 @@
         - service:
           - reinstall
           - start
-      # peer_concurrency: 2500
-      # metric_type: prometheus
-      # service_file_limit: 10000
 
 - hosts: orderers
   gather_facts: false
@@ -37,8 +34,6 @@
         - service:
           - reinstall
           - start
-      # metric_type: prometheus
-      # service_file_limit: 10000
  
 - hosts: cas
   serial: 1

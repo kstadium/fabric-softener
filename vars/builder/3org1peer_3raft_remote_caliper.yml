@@ -1,0 +1,97 @@
+---
+ansible_ssh_user: medium
+bld_msp_config_name: 3org1peer_3raft_remote_caliper
+bld_peer_orgs:
+  - name: Org1
+    msp_id: Org1MSP
+    domain: org1.com
+    enable_node_ous: true
+    user_number: 1
+    peers:
+      - address: 192.168.66.111
+        ssh_user: medium
+        host_name: peer0
+        common_name:
+        port: 7051
+        anchor: true    
+    ca:
+      address: 192.168.66.117
+      ssh_user: medium
+      port: 7054
+      op_port: 9444
+  - name: Org2
+    msp_id: Org2MSP
+    domain: org2.com
+    enable_node_ous: true
+    user_number: 1
+    peers:
+      - address: 192.168.66.112
+        ssh_user: medium
+        host_name: peer0
+        common_name:
+        port: 7051
+        anchor: true
+    ca:
+      address: 192.168.66.117
+      ssh_user: medium
+      port: 7055
+      op_port: 9445
+  - name: Org3
+    msp_id: Org3MSP
+    domain: org3.com
+    enable_node_ous: true
+    user_number: 1
+    peers:
+      - address: 192.168.66.113
+        ssh_user: medium
+        host_name: peer0
+        common_name:
+        port: 7051
+        anchor: true
+    ca:
+      address: 192.168.66.117
+      ssh_user: medium
+      port: 7056
+      op_port: 9446
+bld_orderer_orgs:
+  - name: OrdererOrg
+    msp_id: OrdererOrgMSP
+    domain: ordererorg.com
+    enable_node_ous: true
+    orderers:
+      - address: 192.168.66.114
+        ssh_user: medium
+        host_name: orderer0
+        common_name:
+        port: 7050
+        consenter_port: 7056
+      - address: 192.168.66.115
+        ssh_user: medium
+        host_name: orderer1
+        common_name:
+        port: 7050
+        consenter_port: 7056
+      - address: 192.168.66.116
+        ssh_user: medium
+        host_name: orderer2
+        common_name:
+        port: 7050
+        consenter_port: 7056
+    ca:
+      address: 192.168.66.117
+      ssh_user: medium
+      port: 7057
+      op_port: 9447
+bld_caliper:
+  type: remote
+  calipers:
+    - address: 192.168.66.118
+      ssh_user: medium
+      role: master
+      mqtt_port: 1883
+    - address: 192.168.66.119
+      ssh_user: medium
+      role: worker
+    - address: 192.168.66.120
+      ssh_user: medium
+      role: worker

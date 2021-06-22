@@ -1,0 +1,22 @@
+caliper_workspace: /opt/hyperledger/caliper
+caliper_config_worker_num_each: 3
+caliper_config_rounds:
+  - chaincode_id: fixed-asset
+    rate_control_type: fixed-rate
+    target_tps: 100
+    callbacks: 
+      - name: create-asset
+        arguments:
+          chaincodeID: fixed-asset
+  - chaincode_id: simple
+    rate_control_type: fixed-rate
+    target_tps: 100
+    callbacks:
+      - name: open
+        arguments:
+          money: 100
+caliper_run_install_chaincodes:
+  - simple
+  - smallbank
+  - fixed-asset
+  - auction

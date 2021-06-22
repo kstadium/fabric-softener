@@ -1,0 +1,3 @@
+---
+peer_concurrency: 2500
+service_file_limit: 10000

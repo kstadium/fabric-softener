@@ -1,0 +1,4 @@
+bld_configtx_batch_timeout: "200ms"
+bld_configtx_max_message_count: 1000
+bld_configtx_absoulte_max_bytes: "128 MB"
+bld_configtx_preferred_max_bytes: "128 MB"
