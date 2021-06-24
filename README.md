@@ -4,7 +4,7 @@
     - Caliper v0.3.2
 
 # Prerequisite
-## Local Host - where to install and run ansible
+## Control Node - Any machine with Ansible is installed and running
 ### 1. Install Ansible
  https://docs.ansible.com/ansible/2.9/installation_guide/intro_installation.html#installing-ansible-with-pip
 ### 2. Setup private SSH Key for Connection 
@@ -18,7 +18,7 @@
 
 ### 3. Install Rsync
 
-## Remote Host - where to operate ansible playbook
+## Managed Node - Machine you manage with Ansible
 ### 1. Install python
 - Make sure python interperter in /usr/bin/python
     - Path can be changed by **ansible_python_interpreter** variable
