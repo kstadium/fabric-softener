@@ -1,8 +1,20 @@
+- name: Copy SSH Key for Private Repository
+  copy:
+    src: "{{ install_fabric_key_file }}"
+    dest: /tmp/repository_key
+    mode: '0600'
+  when: install_fabric_key_file is defined
+
+- name: Get Private Key path
+  set_fact:
+    key_file_path: /tmp/repository_key
+  when: install_fabric_key_file is defined
+
 - name: Clone Repository - {{ install_fabric_repo_url }}
   git:
     repo: "{{ install_fabric_repo_url }}"
+    key_file: "{{ key_file_path | default('')}}"
     dest: "/tmp/{{ install_fabric_repo_name }}"
-    key_file: "{{ install_fabric_key_file |default('')}}"
     accept_hostkey: true    
     version: "{{ install_fabric_version }}"
     force : yes
