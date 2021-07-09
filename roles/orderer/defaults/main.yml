@@ -1,3 +1,4 @@
 ---
 # defaults file for orderer
 ledger_path: /var/hyperledger/orderer/production
+install_fabric_repo_name: "fabric"

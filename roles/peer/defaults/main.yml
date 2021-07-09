@@ -1,3 +1,4 @@
 ---
 # defaults file for peer
 ledger_path: /var/hyperledger/peer/production
+install_fabric_repo_name: "fabric"
