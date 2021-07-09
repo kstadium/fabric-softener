@@ -27,26 +27,26 @@
 # Usage
 ## 1. Create MSP, Genesis Block, Channel TX with Inventory File
 ```
-ansible-playbook ./example/build-playbook.yml
+ansible-playbook ./example/build-playbook.yml --extra-vars @vars/builder/2org2peer_3raft.yml
 ```
 
 ## 2. Install Fabric, Fabric-CA
 ```
-ansible-playbook -i ./example/2org2peer_3raft/inventory.yaml ./example/fabric-install-playbook.yml
+ansible-playbook -i ./example/2org2peer_3raft/inventory.yaml -K ./example/fabric-install-playbook.yml
 ```
 ## 3. Set Hostfile, Configure & Start Fabric Network
 ```
-ansible-playbook -i ./example/2org2peer_3raft/inventory.yaml ./example/fabric-config-playbook.yml
+ansible-playbook -i ./example/2org2peer_3raft/inventory.yaml -K ./example/fabric-config-playbook.yml
 ```
 ## 4. Install nvm, node, caliper etc..
 ```
-ansible-playbook -i ./example/2org2peer_3raft/inventory.yaml ./example/caliper-install-playbook.yml
+ansible-playbook -i ./example/2org2peer_3raft/inventory.yaml -K ./example/caliper-install-playbook.yml
 ```
 ## 5. Set Hostfile, Configure & Setup Caliper, Setup Network Manage Scripts
 ```
-ansible-playbook -i ./example/2org2peer_3raft/inventory.yaml ./example/caliper-config-playbook.yml
+ansible-playbook -i ./example/2org2peer_3raft/inventory.yaml -K ./example/caliper-config-playbook.yml --extra-vars @vars/builder/2org2peer_3raft.yml
 ```
 ## 6. Create Channel, Install Chaincode, Run Caliper Benchmarks
 ```
-ansible-playbook -i ./example/2org2peer_3raft/inventory.yaml ./example/caliper-run-playbook.yml
+ansible-playbook -i ./example/2org2peer_3raft/inventory.yaml -K ./example/caliper-run-playbook.yml --extra-vars @vars/caliper/run-sample.yml
 ```
