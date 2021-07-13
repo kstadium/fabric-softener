@@ -14,7 +14,7 @@ caliper_{{ caliper.address }}:
   role: {{ caliper.role }}
   master_address: {{ ns.remote_master.address }}
   mqtt_port: {{ caliper.mqtt_port | default(1883) }} 
-  ansible_ssh_user: {{ caliper.ssh_user }}
+  ansible_ssh_user: {{ caliper.ssh_user | default(ansible_ssh_user)}}
 {% endif %}
 {%- endfor -%}
 caliper_{{ ns.remote_master.address }}:
@@ -24,4 +24,4 @@ caliper_{{ ns.remote_master.address }}:
   role: {{ ns.remote_master.role }}
   master_address: {{ ns.remote_master.address }}
   mqtt_port: {{ ns.remote_master.mqtt_port | default(1883) }}
-  ansible_ssh_user: {{ ns.remote_master.ssh_user }}
+  ansible_ssh_user: {{ ns.remote_master.ssh_user | default(ansible_ssh_user)}}
