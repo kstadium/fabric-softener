@@ -16,5 +16,5 @@
         - name: FABRIC_CFG_PATH
           value: /opt/hyperledger/fabric/{{ orderer.host_name | lower }}.{{ org.domain | lower }}
     fabric_cfg_path: /opt/hyperledger/fabric/{{ orderer.host_name | lower }}.{{ org.domain | lower }}
-    ansible_ssh_user: {{ orderer.ssh_user }}
+    ansible_ssh_user: {{ orderer.ssh_user | default(ansible_ssh_user)}}
 {% endfor %}
