@@ -2,7 +2,7 @@
 all:
     vars:
         ansible_ssh_user: {{ ansible_ssh_user }}
-        ansible_python_interpreter: /usr/bin/python
+        ansible_python_interpreter: {{ ansible_python_interpreter | default("/usr/bin/python") }}
         connection: ssh 
         bld_msp_config_name: {{ bld_msp_config_name }}
         host_file: |
