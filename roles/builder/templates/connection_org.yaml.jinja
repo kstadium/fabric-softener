@@ -1,0 +1,32 @@
+name: fabric-network-peer0-{{ org.name.lower() }}
+version: 1.0.0
+client:
+  organization: {{ org.name }}
+  connection:
+    timeout:
+      peer:
+        endorser: '300'
+{% set peer = org.peers[0] %}
+organizations:
+  {{ org.name }}:
+    mspid: {{ org.msp_id }}
+    peers:
+      - {{ peer.host_name }}.{{ org.domain }}
+    certificateAuthorities:
+      - ca.{{ org.domain }}
+peers:
+  {{ peer.host_name }}.{{ org.domain }}:
+    url: grpcs://{{ peer.address }}:{{ peer.port }}
+    tlsCACerts:
+      path: {{ tls_path }}
+    grpcOptions:
+      ssl-target-name-override: {{ peer.host_name }}.{{ org.domain }}
+      hostnameOverride: {{ peer.host_name }}.{{ org.domain }}
+certificateAuthorities:
+  ca.{{ org.domain }}:
+    url: https://{{ org.ca.address }}:{{ org.ca.port }}
+    caName: ca.{{ org.domain }}
+    tlsCACerts:
+      path: {{ tls_path }}
+    httpOptions:
+      verify: false
