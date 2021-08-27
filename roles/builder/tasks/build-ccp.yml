@@ -5,6 +5,6 @@
   vars:
     control_node_path: "{{ lookup('env', 'CONTROL_NODE_PATH') }}"
     org: "{{ item }}"
-    tls_path: "{{ control_node_path }}/{{bld_msp_config_name }}/crypto-config/peerOrganizations/{{ org.name.lower() }}.com/tlsca/tlsca.{{ org.name.lower() }}.com-cert.pem"
+    tls_path: "{{ control_node_path }}/{{bld_msp_config_name }}/example/crypto-config/peerOrganizations/{{ org.name.lower() }}.com/tlsca/tlsca.{{ org.name.lower() }}.com-cert.pem"
   with_items:
     - "{{ bld_peer_orgs }}"
