@@ -3,8 +3,8 @@
     src: "connection_org.yaml.jinja"
     dest: "{{ playbook_dir }}/{{ bld_msp_config_name }}/connection_{{ org.name.lower() }}.yaml"
   vars:
-    control_node_path: "{{ lookup('env', 'CONTROL_NODE_PATH') }}"
     org: "{{ item }}"
-    tls_path: "{{ control_node_path }}/example/{{bld_msp_config_name }}/crypto-config/peerOrganizations/{{ org.name.lower() }}.com/tlsca/tlsca.{{ org.name.lower() }}.com-cert.pem"
+    tls_path: "{{ playbook_dir }}/{{ bld_msp_config_name }}/crypto-config/peerOrganizations/{{ org.name.lower() }}.com/tlsca/tlsca.{{ org.name.lower() }}.com-cert.pem"
+    tls_pem: "{{ lookup('file', tls_path) }}"
   with_items:
     - "{{ bld_peer_orgs }}"

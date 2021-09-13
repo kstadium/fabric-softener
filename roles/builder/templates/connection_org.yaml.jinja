@@ -19,6 +19,9 @@ peers:
     url: grpcs://{{ peer.address }}:{{ peer.port }}
     tlsCACerts:
       path: {{ tls_path }}
+      pem: |
+{{ tls_pem | indent(8, true) }}
+
     grpcOptions:
       ssl-target-name-override: {{ peer.host_name }}.{{ org.domain }}
       hostnameOverride: {{ peer.host_name }}.{{ org.domain }}
@@ -27,6 +30,9 @@ certificateAuthorities:
     url: https://{{ org.ca.address }}:{{ org.ca.port }}
     caName: ca.{{ org.domain }}
     tlsCACerts:
-      path: {{ tls_path }}
+      pem:
+        - |
+{{ tls_pem | indent(10, true) }}
+
     httpOptions:
       verify: false
