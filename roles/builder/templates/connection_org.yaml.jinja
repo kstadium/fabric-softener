@@ -1,3 +1,6 @@
+{% set peer = org.peers[0] %}
+{% set peer_host = [peer.host_name, org.domain] | join(".") %}
+
 name: fabric-network-peer0-{{ org.name.lower() }}
 version: 1.0.0
 client:
@@ -6,25 +9,23 @@ client:
     timeout:
       peer:
         endorser: '300'
-{% set peer = org.peers[0] %}
 organizations:
   {{ org.name }}:
     mspid: {{ org.msp_id }}
     peers:
-      - {{ peer.host_name }}.{{ org.domain }}
+      - {{ peer_host }}
     certificateAuthorities:
       - ca.{{ org.domain }}
 peers:
-  {{ peer.host_name }}.{{ org.domain }}:
+  {{ peer_host }}:
     url: grpcs://{{ peer.address }}:{{ peer.port }}
     tlsCACerts:
-      path: {{ tls_path }}
       pem: |
 {{ tls_pem | indent(8, true) }}
 
     grpcOptions:
-      ssl-target-name-override: {{ peer.host_name }}.{{ org.domain }}
-      hostnameOverride: {{ peer.host_name }}.{{ org.domain }}
+      ssl-target-name-override: {{ peer_host }}
+      hostnameOverride: {{ peer_host }}
 certificateAuthorities:
   ca.{{ org.domain }}:
     url: https://{{ org.ca.address }}:{{ org.ca.port }}
