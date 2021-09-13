@@ -1,0 +1,55 @@
+{% set peer = org.peers[0] %}
+{% set peer_host = [peer.host_name, org.domain] | join(".") %}
+{% set tls_pem = tls_pem | replace('\n','\\n') %}
+
+{
+  "name": "fabric-network-peer0-{{ org.name.lower() }}",
+  "version": "1.0.0",
+  "client": {
+    "organization": "{{ org.name }}",
+    "connection": {
+      "timeout": {
+        "peer": {
+          "endorser": "300"
+        }
+      }
+    }
+  },
+  "organizations": {
+    "{{ org.name }}": {
+      "mspid": "{{ org.msp_id }}",
+      "peers": [
+        "{{ peer_host }}"
+      ],
+      "certificateAuthorities": [
+        "ca.{{ org.domain }}"
+      ]
+    }
+  },
+  "peers": {
+    "{{ peer_host }}": {
+      "url": "grpcs://{{ peer.address }}:{{ peer.port }}",
+      "tlsCACerts": {
+        "pem": "{{ tls_pem | replace('\n','\\n') }}"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "{{ peer_host }}",
+        "hostnameOverride": "{{ peer_host }}"
+      }
+    }
+  },
+  "certificateAuthorities": {
+    "ca.org1.com": {
+      "url": "https://{{ org.ca.address }}:{{ org.ca.port }}",
+      "caName": "ca.{{ org.domain }}",
+      "tlsCACerts": {
+        "pem": [
+          "{{ tls_pem | replace('\n','\\n') }}"
+        ]
+      },
+      "httpOptions": {
+        "verify": false
+      }
+    }
+  }
+}
