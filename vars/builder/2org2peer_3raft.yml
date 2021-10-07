@@ -1,5 +1,6 @@
 ---
 ansible_ssh_user: medium
+ansible_python_interpreter: /usr/bin/python
 bld_msp_config_name: 2org2peer_3raft
 bld_peer_orgs:
   - name: Org1
