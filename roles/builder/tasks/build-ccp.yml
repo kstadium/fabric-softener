@@ -8,3 +8,14 @@
     tls_pem: "{{ lookup('file', tls_path) }}"
   with_items:
     - "{{ bld_peer_orgs }}"
+
+- name: set connection_orgs.json
+  template:
+    src: "connection_org.json.jinja"
+    dest: "{{ playbook_dir }}/{{ bld_msp_config_name }}/connection_{{ org.name.lower() }}.json"
+  vars:
+    org: "{{ item }}"
+    tls_path: "{{ playbook_dir }}/{{ bld_msp_config_name }}/crypto-config/peerOrganizations/{{ org.name.lower() }}.com/tlsca/tlsca.{{ org.name.lower() }}.com-cert.pem"
+    tls_pem: "{{ lookup('file', tls_path) }}"
+  with_items:
+    - "{{ bld_peer_orgs }}"
