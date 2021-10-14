@@ -1,0 +1,10 @@
+- name: set connection_orgs.yaml
+  template:
+    src: "connection_org.yaml.jinja"
+    dest: "{{ playbook_dir }}/{{ bld_msp_config_name }}/connection_{{ org.name.lower() }}.yaml"
+  vars:
+    org: "{{ item }}"
+    tls_path: "{{ playbook_dir }}/{{ bld_msp_config_name }}/crypto-config/peerOrganizations/{{ org.name.lower() }}.com/tlsca/tlsca.{{ org.name.lower() }}.com-cert.pem"
+    tls_pem: "{{ lookup('file', tls_path) }}"
+  with_items:
+    - "{{ bld_peer_orgs }}"
