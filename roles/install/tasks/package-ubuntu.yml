@@ -4,6 +4,7 @@
     name:
       - build-essential
       - git
+      - curl
     state: present
     update_cache: yes
     allow_unauthenticated: yes

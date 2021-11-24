@@ -7,8 +7,8 @@
         tasks_from: main.yml
       vars:
         install_targets:
-          - node
           - package
+          - node
           - hosts
           - fabric-v2
         install_fabric_target: peer
@@ -55,3 +55,4 @@
           - package
           - dockercompose
   when: role == "worker"
+...
