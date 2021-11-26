@@ -1,0 +1,15 @@
+- name: "inner-anchor-update"
+  block: 
+    - name: generate anchorpeer update tx
+      shell: bin/configtxgen -profile SampleProfile -outputAnchorPeersUpdate {{ org.name | lower }}-anchor.tx -channelID mychannel -asOrg {{ org.name }}
+      args:
+        chdir: "{{ playbook_dir }}/{{ bld_msp_config_name }}"
+      register: res
+      with_items:
+        - "{{ org.peers }}"
+      loop_control:
+        loop_var: peer
+      when: 
+        - peer.anchor == true 
+        - not (res.changed|d(false))
+      
