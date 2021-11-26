@@ -18,9 +18,9 @@
   args:
     chdir: "{{ playbook_dir }}/{{ bld_msp_config_name }}"
 
-- name: generate anchorpeer update tx
-  shell: bin/configtxgen -profile SampleProfile -outputAnchorPeersUpdate {{ item.name | lower }}-anchor.tx -channelID mychannel -asOrg {{ item.name }}
-  args:
-    chdir: "{{ playbook_dir }}/{{ bld_msp_config_name }}"
+- name: include generate anchor peer update tx
+  include_tasks: "inner-anchor-update.yml"
   with_items:
     - "{{ bld_peer_orgs }}"
+  loop_control:
+    loop_var: org
