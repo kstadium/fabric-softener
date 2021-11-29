@@ -4,12 +4,22 @@
   register: nvm_exists
   ignore_errors: true
 
+- name: Check nvm installed
+  shell: 
+    cmd: /bin/bash -ic 'nvm -v'
+  register: nvm_exists
+  ignore_errors: true
+
 - name: Install nvm
   block:
-    - name: setup nvm
+    - name: setup nvm with curl
       shell: "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash"
-  when: nvm_exists.rc != 0
-
+      when: curl_exists.rc == 0
+    - name: setup nvm with wget
+      shell: "wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash"
+      when: curl_exists.rc != 0
+  when:  nvm_exists.rc != 0
+  
 - name: Check node installed
   shell:
     cmd: /bin/bash -ic 'which node'
