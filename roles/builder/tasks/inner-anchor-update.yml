@@ -10,6 +10,7 @@
       loop_control:
         loop_var: peer
       when: 
+        - peer.anchor is defined
         - peer.anchor == true 
         - not (res.changed|d(false))
       
