@@ -1,4 +1,4 @@
-- name: Install mosquitto 
+- name: Install mosquitto
   become: true
   yum:
     name:

@@ -34,7 +34,7 @@
         - service:
           - reinstall
           - start
- 
+
 - hosts: cas
   serial: 1
   gather_facts: false
@@ -54,6 +54,6 @@
           - service:
             - reinstall
             - start
-        ca_tls_enabled: true        
+        ca_tls_enabled: true
         ca_admin: admin
         ca_adminpw: adminpw

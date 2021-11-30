@@ -1,16 +1,16 @@
 peer:
-  id: 
-  address: 
-  mspConfigPath: 
-  localMspId: 
+  id:
+  address:
+  mspConfigPath:
+  localMspId:
   tls:
         enabled:  true
         clientAuthRequired: false
         cert:
-            file: 
+            file:
         key:
-            file: 
+            file:
         rootcert:
-            file: 
+            file:
         clientRootCAs:
             files:

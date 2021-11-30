@@ -14,7 +14,7 @@ services:
         extra_hosts:
 {% for org in bld_peer_orgs %}
 {% for peer in org.peers %}
-        - {{ peer.host_name }}.{{ org.domain }}:{{ peer.address }} 
+        - {{ peer.host_name }}.{{ org.domain }}:{{ peer.address }}
 {% endfor %}
         - ca.{{ org.domain }}:{{ org.ca.address }}
 {% endfor %}

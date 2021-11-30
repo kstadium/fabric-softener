@@ -15,7 +15,7 @@ ca_{{ org.name | lower}}:
     ca_tls_key: {{ bld_msp_config_name }}/crypto-config/{{ org_type }}/{{ org.domain }}/tlsca/key.pem
     ca_tls_cert: {{ bld_msp_config_name }}/crypto-config/{{ org_type }}/{{ org.domain }}/tlsca/tlsca.{{ org.domain }}-cert.pem
     fabric_ca_home: /opt/hyperledger/fabric-ca/{{ org.name | lower }}
-    service: ca-{{ org.name | lower }} 
+    service: ca-{{ org.name | lower }}
     service_description: Fabric CA for {{ org.name | upper }}
     service_variables:
         - name: FABRIC_CA_HOME

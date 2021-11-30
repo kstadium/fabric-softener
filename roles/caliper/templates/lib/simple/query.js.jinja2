@@ -36,7 +36,7 @@ module.exports.init = function(blockchain, context, args) {
 
 module.exports.run = function() {
     const acc  = account_array[Math.floor(Math.random()*(account_array.length))];
-    
+
     if (bc.getType() === 'fabric') {
         let args = {
             chaincodeFunction: 'query',

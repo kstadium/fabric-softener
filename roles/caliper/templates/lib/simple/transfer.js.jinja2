@@ -44,7 +44,7 @@ module.exports.run = function () {
     const account1 = account_array[Math.floor(Math.random() * (account_array.length))];
     const account2 = account_array[Math.floor(Math.random() * (account_array.length))];
     let args;
-    
+
     if (bc.getType() === 'fabric') {
         args = {
             chaincodeFunction: 'transfer',
@@ -65,7 +65,7 @@ module.exports.run = function () {
         };
     }
     txIndex++;
-    
+
     return bc.invokeSmartContract(contx, 'simple', 'v0', args, 10);
 
 };

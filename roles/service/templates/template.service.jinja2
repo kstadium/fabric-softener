@@ -12,5 +12,5 @@ Restart={{ service_restart_option | default("no") }}
 {% if service_file_limit is defined %}
 LimitNOFILE={{ service_file_limit }}
 {% endif %}
-[Install] 
+[Install]
 WantedBy=multi-user.target

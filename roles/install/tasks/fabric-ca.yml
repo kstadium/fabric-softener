@@ -11,7 +11,7 @@
         repo: "https://github.com/hyperledger/fabric-ca"
         dest: "/tmp/fabric-ca"
         version: "{{ install_fabric_ca_version | default('main') }}"
-        accept_hostkey: true    
+        accept_hostkey: true
         force : yes
       register: result
 
@@ -21,15 +21,15 @@
         chdir: /tmp/fabric-ca
 
     - name: Build Binary
-      shell: 
+      shell:
         cmd: /bin/bash -ic 'make native'
         chdir: /tmp/fabric-ca
-        
+
     - name: Copy Binary to PATH
       become: true
-      shell: 
+      shell:
         cmd: cp bin/* /usr/local/bin
         chdir: /tmp/fabric-ca
 
   when: ca_exists.rc != 0
-    
+

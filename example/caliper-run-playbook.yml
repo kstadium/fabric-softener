@@ -8,4 +8,4 @@
         - run:
           - create-channel
           - install-chaincode
-          - launch          
+          - launch

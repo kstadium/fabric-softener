@@ -7,7 +7,7 @@
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
     mode: 0755
-    
+
 - name: orderer configure task
   include_tasks: "{{ target }}.yml"
   with_items: "{{ values }}"

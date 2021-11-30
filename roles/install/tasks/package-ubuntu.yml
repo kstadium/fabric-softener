@@ -1,6 +1,6 @@
 - name: Install packages
   become: true
-  apt: 
+  apt:
     name:
       - build-essential
       - git
@@ -21,12 +21,12 @@
         keyring: /usr/share/keyrings/docker-archive-keyring.gpg
         url: https://download.docker.com/linux/ubuntu/gpg
     - name: setup stable repository
-      shell: 
+      shell:
         cmd: echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
     - name: install docker
       apt:
         name:
-          - docker-ce 
+          - docker-ce
           - docker-ce-cli
           - containerd.io
         state: present

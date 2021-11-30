@@ -6,7 +6,7 @@
 - name: Error - no msp
   fail:
     msg: crypto-config is not exists
-  when: not msp_exists.stat.exists 
+  when: not msp_exists.stat.exists
 
 - name: set configtx.yaml
   template:

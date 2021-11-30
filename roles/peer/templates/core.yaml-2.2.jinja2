@@ -9,7 +9,7 @@ peer:
     listenAddress: 0.0.0.0:{{ peer_port }}
     address: {{ peer_id }}:{{ peer_port }}
     addressAutoDetect: false
-    
+
     keepalive:
         interval: 7200s
         timeout: 20s
@@ -25,7 +25,7 @@ peer:
         useLeaderElection: true
         orgLeader: false
         membershipTrackerInterval: 5s
-        endpoint: 
+        endpoint:
         maxBlockCountToStore: 100
         maxPropagationBurstLatency: 10ms
         maxPropagationBurstSize: 10
@@ -95,7 +95,7 @@ peer:
     authentication:
         timewindow: 15m
     fileSystemPath: {{ ledger_path }}
-    
+
 {% include './templates/' + (bccsp_type | default('sw')) + '.yaml.jinja2' %}
 
     mspConfigPath: {{ bld_msp_config_name }}/msp
@@ -116,7 +116,7 @@ peer:
           -
             name: DefaultAuth
           -
-            name: ExpirationCheck            
+            name: ExpirationCheck
         decorators:
           -
             name: DefaultDecorator
@@ -128,7 +128,7 @@ peer:
           vscc:
             name: DefaultValidation
             library:
-                            
+
     validatorPoolSize:
     discovery:
         enabled: true
@@ -136,7 +136,7 @@ peer:
         authCacheMaxSize: 1000
         authCachePurgeRetentionRatio: 0.75
         orgMembersAllowedAccess: false
-    
+
     # Limits is used to configure some internal resource limits.
     limits:
         # Concurrency limits the number of concurrently running requests to a service on each peer.
@@ -155,7 +155,7 @@ peer:
 ###############################################################################
 vm:
     endpoint: unix:///var/run/docker.sock
-    
+
     docker:
         tls:
             enabled: false
@@ -182,7 +182,7 @@ vm:
 #    Chaincode section
 #
 ###############################################################################
-chaincode:    
+chaincode:
     id:
         path:
         name:
@@ -206,7 +206,7 @@ chaincode:
         cscc: enable
         lscc: enable
         qscc: enable
-                                    
+
     logging:
         level:  info
         shim:   warning
@@ -240,7 +240,7 @@ ledger:
     collElgProcMaxDbBatchSize: 5000
     collElgProcDbBatchesInterval: 1000
     deprioritizedDataReconcilerInterval: 60m
-    
+
 ###############################################################################
 #
 #    Operations section

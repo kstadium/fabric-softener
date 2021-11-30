@@ -4,7 +4,7 @@
     state: absent
 
 - name: Copy chaincode source - {{ chaincode.name }}
-  copy: 
+  copy:
     src: files/{{ chaincode.name }}
     dest: "{{ caliper_workspace }}/src"
     mode: 0755

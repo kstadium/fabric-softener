@@ -18,7 +18,7 @@ if peer channel list | grep -q $CHANNEL_NAME; then
     echo "channel has already been set up"
     exit
 fi
-{% if org == bld_peer_orgs[0] and peer == org.peers[0] %} 
+{% if org == bld_peer_orgs[0] and peer == org.peers[0] %}
 peer channel create -c $CHANNEL_NAME --tls \
     -f networks/$CHANNEL_NAME.tx \
     -o {{ orderer.address }}:{{ orderer.port }} --ordererTLSHostnameOverride {{ orderer.host_name }}.{{ ordererorg.domain }} \

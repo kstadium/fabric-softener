@@ -1,6 +1,6 @@
 - name: Install packages
   become: true
-  yum: 
+  yum:
     name:
       - "@development"
       - git
@@ -19,14 +19,14 @@
         name:
           - yum-utils
         state: present
-    - name: setup repository  
+    - name: setup repository
       shell: yum-config-manager \
               --add-repo \
               https://download.docker.com/linux/centos/docker-ce.repo
     - name: install docker
       yum:
         name:
-          - docker-ce 
+          - docker-ce
           - docker-ce-cli
           - containerd.io
         state: present
