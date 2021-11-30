@@ -12,3 +12,9 @@
   shell:
     cmd: /bin/bash -ic 'go mod vendor'
     chdir: "{{ caliper_workspace }}/src/{{ chaincode.name }}/golang"
+
+- name: Setup collection config
+  template:
+    src: "collection-config.yaml.jinja2"
+    dest: "{{ caliper_workspace }}/src/{{ chaincode.name }}/collection-config.json"
+  when: chaincode.collection_exists
