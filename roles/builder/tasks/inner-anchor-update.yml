@@ -13,4 +13,6 @@
         - peer.anchor is defined
         - peer.anchor == true 
         - not (res.changed|d(false))
-      
+    - name: reset register
+      set_fact:
+        res: ""

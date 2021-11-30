@@ -4,6 +4,7 @@
 export CORE_PEER_TLS_ENABLED=true
 export CHANNEL_NAME=mychannel
 {% for org in bld_peer_orgs %}
+{% set anchor_updated = false %}
 {% for peer in org.peers %}
 
 export CORE_PEER_ID={{ peer.host_name }}.{{ org.domain }}
@@ -29,12 +30,13 @@ peer channel join --tls \
     -o {{ orderer.address }}:{{ orderer.port }} --ordererTLSHostnameOverride {{ orderer.host_name }}.{{ ordererorg.domain }} \
     --cafile networks/crypto-config/ordererOrganizations/{{ ordererorg.domain }}/users/Admin@{{ ordererorg.domain }}/tls/ca.crt
 
-{% if peer == org.peers[0] %} 
+{% if anchor_updated == false and peer.anchor is defined and peer.anchor == true %}
+{% set anchor_updated = true %}
 peer channel update -c $CHANNEL_NAME --tls \
     -f networks/{{ org.name | lower }}-anchor.tx \
     -o {{ orderer.address }}:{{ orderer.port }}  --ordererTLSHostnameOverride {{ orderer.host_name }}.{{ ordererorg.domain }} \
     --cafile networks/crypto-config/ordererOrganizations/{{ ordererorg.domain }}/users/Admin@{{ ordererorg.domain }}/tls/ca.crt
-    {% endif %}
+{% endif %}
 {% endfor %}
 {% endfor %}
 
