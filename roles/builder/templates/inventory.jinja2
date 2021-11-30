@@ -55,11 +55,11 @@ all:
         calipers:
             hosts:
         {%- if bld_caliper.type == "local" %}
-            {% filter indent(width=14, first=True) %}
+            {% filter indent(width=14, first=False) %}
             {% include './templates/inventory_caliper_local.jinja2'  %}
             {% endfilter %}
         {%- elif bld_caliper.type == "remote" %}
-            {% filter indent(width=14, first=True) %}
+            {% filter indent(width=14, first=False) %}
             {% include './templates/inventory_caliper_remote.jinja2'  %}
             {% endfilter %}
         {% endif %}
