@@ -9,10 +9,8 @@
     src: "{{ playbook_dir }}/{{ bld_msp_config_name }}/mychannel.tx"
     dest: "{{ caliper_workspace | mandatory }}/networks/"
 
-- name: Copy anchorpeer update transaction
-  copy:
-    src: "{{ playbook_dir }}/{{ bld_msp_config_name }}/{{ org.name | lower }}-anchor.tx"
-    dest: "{{ caliper_workspace | mandatory }}/networks/"
+- name: include copy anchorpeer update transaction
+  include_tasks: "inner_anchor_update.yml"
   with_items:
     - "{{ bld_peer_orgs }}"
   loop_control:

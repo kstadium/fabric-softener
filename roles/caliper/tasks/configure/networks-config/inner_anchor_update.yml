@@ -1,0 +1,17 @@
+- name: Copy anchorpeer update transaction
+  copy:
+    src: "{{ playbook_dir }}/{{ bld_msp_config_name }}/{{ org.name | lower }}-anchor.tx"
+    dest: "{{ caliper_workspace | mandatory }}/networks/"
+  register: res
+  with_items:
+    - "{{ org.peers }}"
+  loop_control:
+    loop_var: peer
+  when: 
+    - peer.anchor is defined
+    - peer.anchor == true 
+    - not (res.changed|d(false))
+    
+- name: reset register
+  set_fact:
+    res: ""
