@@ -4,7 +4,7 @@ caliper_config_rounds:
   - chaincode_id: fixed-asset
     rate_control_type: fixed-rate
     target_tps: 100
-    callbacks: 
+    callbacks:
       - name: create-asset
         arguments:
           chaincodeID: fixed-asset

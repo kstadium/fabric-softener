@@ -15,7 +15,7 @@
     repo: "{{ install_fabric_repo_url }}"
     key_file: "{{ key_file_path | default('')}}"
     dest: "/tmp/{{ install_fabric_repo_name }}"
-    accept_hostkey: true    
+    accept_hostkey: true
     version: "{{ install_fabric_version }}"
     force : yes
 
@@ -27,10 +27,10 @@
 - name: Build Binary - {{ install_fabric_repo_name }}
   shell:
     cmd: /bin/bash -ic 'make {{ install_fabric_target | default('native')}}'
-    chdir: /tmp/{{ install_fabric_repo_name }}  
+    chdir: /tmp/{{ install_fabric_repo_name }}
 
 - name: Copy Binary to PATH - {{ install_fabric_repo_name }}
   become: true
-  shell: 
+  shell:
     cmd: cp ./build/bin/* /usr/local/bin
     chdir: /tmp/{{ install_fabric_repo_name }}

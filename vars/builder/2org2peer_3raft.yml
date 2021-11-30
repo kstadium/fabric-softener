@@ -80,4 +80,4 @@ bld_caliper:
   calipers:
     - address: 192.168.66.120
       ssh_user: medium
-      role: localmaster    
+      role: localmaster

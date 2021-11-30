@@ -24,7 +24,7 @@ fi
 peer lifecycle chaincode install \
     --peerAddresses {{ peer.host_name }}.{{ org.domain }}:{{ peer.port }} \
     --tlsRootCertFiles networks/crypto-config/peerOrganizations/{{ org.domain }}/users/Admin@{{ org.domain }}/tls/ca.crt \
-    networks/{{ chaincode.name }}.tar.gz 
+    networks/{{ chaincode.name }}.tar.gz
 {% endfor %}
 
 if [ -z "$PKG_ID" ]
@@ -59,4 +59,4 @@ peer lifecycle chaincode commit -o {{ orderer.host_name }}.{{ ordererorg.domain 
 {% if chaincode.collection_exists %}
         --collections-config src/{{ chaincode.name }}/collection-config.json \
 {% endif %}
-        --sequence 1 
+        --sequence 1

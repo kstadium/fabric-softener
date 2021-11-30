@@ -4,5 +4,5 @@
     chdir: "{{ caliper_workspace | mandatory }}"
   register: ps
 - name: print result
-  debug: 
+  debug:
     var: ps.stdout

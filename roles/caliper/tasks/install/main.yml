@@ -6,7 +6,7 @@
         name: install
         tasks_from: main.yml
       vars:
-        install_targets: 
+        install_targets:
           - node
           - package
           - hosts
@@ -18,7 +18,7 @@
         name: install
         tasks_from: main.yml
       vars:
-        install_targets: 
+        install_targets:
           - mqtt
       when: type == "remote"
 
@@ -31,12 +31,12 @@
         group: "{{ ansible_user }}"
         mode: 0755
         recurse: true
-      
+
     - name: npm init
       shell:
         cmd: /bin/bash -ic 'npm init -y'
         chdir: "{{ caliper_workspace | mandatory }}"
-        
+
     - name: npm install caliper
       shell:
         cmd: /bin/bash -ic 'npm install --only=prod @hyperledger/caliper-cli@{{ caliper_version | default(0.3.2) }}'
@@ -50,7 +50,7 @@
         name: install
         tasks_from: main.yml
       vars:
-        install_targets: 
+        install_targets:
           - node
           - package
           - dockercompose

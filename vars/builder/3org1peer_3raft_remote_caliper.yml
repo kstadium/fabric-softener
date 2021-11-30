@@ -13,7 +13,7 @@ bld_peer_orgs:
         host_name: peer0
         common_name:
         port: 7051
-        anchor: true    
+        anchor: true
     ca:
       address: 192.168.66.117
       ssh_user: medium

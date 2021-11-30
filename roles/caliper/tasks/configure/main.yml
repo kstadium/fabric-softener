@@ -1,7 +1,6 @@
----  
+---
 - name: caliper configure task
   include_tasks: "{{ target }}/main.yml"
   with_items: "{{ values }}"
   loop_control:
     loop_var: target
-  

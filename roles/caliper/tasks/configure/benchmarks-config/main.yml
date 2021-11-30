@@ -31,9 +31,9 @@
         - launch-master
       loop_control:
         loop_var: script
-      when: role != "worker"  
+      when: role != "worker"
     - name: Create core.yaml
-      copy: 
+      copy:
         src: files/core.yaml
         dest: "{{ caliper_workspace }}"
   when: role != "worker"
@@ -46,7 +46,7 @@
         cmd: /bin/bash -ic 'docker-compose down'
         chdir: "{{ caliper_workspace | mandatory }}"
       ignore_errors: true
-    - name: Setup docker-compose file   
+    - name: Setup docker-compose file
       template:
         src: docker-compose.yaml.jinja2
         dest: "{{ caliper_workspace | mandatory }}/docker-compose.yaml"

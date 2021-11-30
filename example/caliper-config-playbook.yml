@@ -10,4 +10,4 @@
               - networks-config
               - caliper-config
         caliper_workspace: /opt/hyperledger/caliper
-        caliper_config_sut_version: 2.1.0        
+        caliper_config_sut_version: 2.1.0

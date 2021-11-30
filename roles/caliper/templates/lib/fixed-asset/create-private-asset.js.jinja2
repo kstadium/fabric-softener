@@ -36,7 +36,7 @@ module.exports.run = function() {
     asset.uuid = uuid;
     asset.content = "private_" + txIndex.toString(16);
     txIndex++;
-    
+
     const myArgs = {
         chaincodeFunction: 'createPrivateAsset',
         chaincodeArguments: [uuid],

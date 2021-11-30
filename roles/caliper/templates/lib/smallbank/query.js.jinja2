@@ -34,7 +34,7 @@ module.exports.init = function(blockchain, context, args) {
 };
 
 module.exports.run = function() {
-    
+
     let acc_num  = accounts[Math.floor(Math.random()*(accounts.length))];
     if (bc.getType() === 'fabric') {
         let args = {
