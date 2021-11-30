@@ -8,8 +8,10 @@
     msp_dir: {{ bld_msp_config_name }}/crypto-config/peerOrganizations/{{ org.domain }}/peers/{{ peer.host_name}}.{{ org.domain }}/msp
     tls_dir: {{ bld_msp_config_name }}/crypto-config/peerOrganizations/{{ org.domain }}/peers/{{ peer.host_name}}.{{ org.domain }}/tls
     peer_gossip_bootstrap: "[ {% for p in org.peers %}{{p.host_name}}.{{org.domain}}:{{p.port}}, {% endfor %}]"
-    {% if peer.anchor is true %}
-    peer_external_endpoint: {{ peer.host_name }}.{{ org.domain }}:{{ peer.port }}
+    {% if ( peer.anchor is defined ) %}
+        {% if peer.anchor %}
+            peer_external_endpoint: {{ peer.host_name }}.{{ org.domain }}:{{ peer.port }}
+        {% endif %}
     {% endif %}
     service: {{ peer.host_name | lower }}-{{ org.name | lower }}
     service_description: Peer - {{ peer.host_name }}.{{ org.domain }}
