@@ -7,4 +7,4 @@
   template:
     src: "collection-config.yaml.jinja2"
     dest: "{{ caliper_workspace }}/src/{{ chaincode.name }}/collection-config.json"
-  when: chaincode.collection_exists
+  when: chaincode.collection_config_needed
