@@ -27,4 +27,4 @@ caliper_config_chaincodes:
       - smallbankOperations
   - name: auction
     lang: golang
-    collection_config_needed: true
+    collection_config_needed: false
