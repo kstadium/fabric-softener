@@ -6,8 +6,10 @@
 
 - name: Copy mspconfig
   copy:
-    src: "{{ playbook_dir }}/{{ '/'.join(msp_dir.split('/')[:-1]) }}/{{ item.path }}"
+    src: "{{ playbook_dir }}/{{ '/'.join(msp_dir.split('/')[:-1]) }}/{{ path_item.path }}"
     dest: "{{ fabric_cfg_path | mandatory }}/{{ bld_msp_config_name }}/"
   with_items:
     - { path: "msp" }
     - { path: "tls" }
+  loop_control:
+    loop_var: path_item
