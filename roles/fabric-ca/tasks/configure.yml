@@ -35,10 +35,12 @@
 
 - name: Copy mspconfig
   copy:
-        src: "{{ playbook_dir }}/{{ item.path }}"
-        dest: "{{ fabric_ca_home | mandatory }}/{{ item.path }}"
+        src: "{{ playbook_dir }}/{{ path_item.path }}"
+        dest: "{{ fabric_ca_home | mandatory }}/{{ path_item.path }}"
   with_items:
     - { path: "{{ ca_private_key }}" }
     - { path: "{{ ca_certificate }}" }
     - { path: "{{ ca_tls_key }}" }
     - { path: "{{ ca_tls_cert }}" }
+  loop_control:
+    loop_var: path_item
