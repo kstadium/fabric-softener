@@ -10,26 +10,29 @@
     recurse: true
   when: role != "worker"
 
-- name: Copy chaincode source
-  include_tasks: _setup_source.yml
-  with_items: "{{ caliper_config_chaincodes }}"
-  loop_control:
-    loop_var: chaincode
-  when: role != "worker"
+- name: Chaincode related setup
+  block:
+    - name: Copy chaincode source
+      include_tasks: _setup_source.yml
+      with_items: "{{ caliper_config_chaincodes }}"
+      loop_control:
+        loop_var: chaincode
+      when: role != "worker"
 
-- name: Setup benchmark callback
-  include_tasks: _setup_callback.yml
-  with_items: "{{ caliper_config_chaincodes }}"
-  loop_control:
-    loop_var: chaincode
-  when: chaincode.callbacks is defined
+    - name: Setup benchmark callback
+      include_tasks: _setup_callback.yml
+      with_items: "{{ caliper_config_chaincodes }}"
+      loop_control:
+        loop_var: chaincode
+      when: chaincode.callbacks is defined
 
-- name: Setup chaincode install script
-  include_tasks: _setup_script.yml
-  with_items: "{{ caliper_config_chaincodes }}"
-  loop_control:
-    loop_var: chaincode
-  when: role != "worker"
-
-
-
+    - name: Setup chaincode install script
+      include_tasks: _setup_script.yml
+      with_items: "{{ caliper_config_chaincodes }}"
+      loop_control:
+        loop_var: chaincode
+      when: role != "worker"
+  when: 
+    - caliper_config_chaincodes != None
+    - caliper_config_chaincodes is iterable
+    - caliper_config_chaincodes | length > 0
