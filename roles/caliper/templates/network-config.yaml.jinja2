@@ -61,12 +61,14 @@ channels:
         eventSource: true
 {% endfor %}
 {% endfor %}
+{% if caliper_config_chaincodes != None and caliper_config_chaincodes is iterable and caliper_config_chaincodes | length > 0 %}
     chaincodes:
 {% for cc in caliper_config_chaincodes %}
     - id: {{ cc.name }}
       version: v1.0.0
       language: {{ cc.lang }}
 {% endfor %}
+{% endif %}
 
 organizations:
 {% for org in bld_peer_orgs %}
