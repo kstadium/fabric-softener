@@ -3,11 +3,32 @@
     path: "{{ caliper_workspace | mandatory }}/src/{{ chaincode.name }}"
     state: absent
 
+- name: Clone chaincode source - {{ chaincode.name }}
+  block:
+    - name: Copy key file
+      copy:
+        src: "{{ chaincode.key_file_path }}"
+        dest: "~/.ssh/{{ chaincode.name }}"
+        mode: 0600
+      when: chaincode.key_file_path is defined
+    - name: Git clone 
+      git:
+        repo: "{{ chaincode.repo_url }}"
+        key_file: "{% if chaincode.key_file_path is defined %}{{ '~/.ssh/'+chaincode.name }}{% else %}{{''}}{% endif %}"
+        dest: "{{ caliper_workspace }}/src/{{ chaincode.name }}/{{chaincode.lang}}"
+        accept_hostkey: true
+        version: "{{ chaincode.version | default('HEAD') }}"
+        force : yes
+  when: chaincode.repo_url is defined
+
 - name: Copy chaincode source - {{ chaincode.name }}
   copy:
     src: files/{{ chaincode.name }}
     dest: "{{ caliper_workspace }}/src"
     mode: 0755
+  when: 
+    - chaincode.repo_url is not defined
+    
 
 - name: Get dependencies for chaincode - {{ chaincode.name }}
   include_tasks: get_dependency/{{chaincode.lang}}.yml

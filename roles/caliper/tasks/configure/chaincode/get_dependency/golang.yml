@@ -1,7 +1,13 @@
+- name: Check if go.mod exists
+  stat:
+    path: "{{ caliper_workspace }}/src/{{ chaincode.name }}/golang/go.mod"
+  register: go_mod_exists
+
 - name: go mod init
   shell:
-    cmd: /bin/bash -ic 'go mod init {{ chaincode.module_path }}'
+    cmd: /bin/bash -ic 'go mod init {{ chaincode.module_path | default(chaincode.name) }}'
     chdir: "{{ caliper_workspace }}/src/{{ chaincode.name }}/golang"
+  when: not go_mod_exists.stat.exists
 
 - name: go mod tidy
   shell:

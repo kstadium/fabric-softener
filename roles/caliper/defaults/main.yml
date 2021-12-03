@@ -15,6 +15,7 @@ caliper_config_chaincodes:
       - create-private-asset
   - name: simple
     module_path: simple
+    repo_url: "https://github.com/sukill/simple"
     lang: golang
     collection_config_needed: false
     callbacks:

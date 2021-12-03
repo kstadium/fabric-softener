@@ -12,7 +12,7 @@
 
 - name: Chaincode related setup
   block:
-    - name: Copy chaincode source
+    - name: Setup chaincode source
       include_tasks: _setup_source.yml
       with_items: "{{ caliper_config_chaincodes }}"
       loop_control:
