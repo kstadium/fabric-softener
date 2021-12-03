@@ -39,7 +39,7 @@ peer lifecycle chaincode approveformyorg -o {{ orderer.host_name }}.{{ ordereror
         --cafile networks/crypto-config/ordererOrganizations/{{ ordererorg.domain }}/users/Admin@{{ ordererorg.domain }}/tls/ca.crt \
         --signature-policy "OR({{ msp_ids|join(',') }})" --channelID mychannel --name {{ chaincode.name }} --version v1.0.0 \
         --package-id $PKG_ID \
-{% if chaincode.collection_config_needed %}
+{% if chaincode.collection_config_needed is defined and chaincode.collection_config_needed %}
         --collections-config src/{{ chaincode.name }}/collection-config.json \
 {% endif %}
         --sequence 1
@@ -56,7 +56,7 @@ peer lifecycle chaincode commit -o {{ orderer.host_name }}.{{ ordererorg.domain 
         --peerAddresses {{ peer.host_name }}.{{ org.domain }}:{{ peer.port }} \
         --tlsRootCertFiles networks/crypto-config/peerOrganizations/{{ org.domain }}/users/Admin@{{ org.domain }}/tls/ca.crt \
 {% endfor %}
-{% if chaincode.collection_config_needed %}
+{% if chaincode.collection_config_needed is defined and chaincode.collection_config_needed %}
         --collections-config src/{{ chaincode.name }}/collection-config.json \
 {% endif %}
         --sequence 1
