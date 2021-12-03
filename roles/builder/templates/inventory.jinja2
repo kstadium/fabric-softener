@@ -47,6 +47,8 @@ all:
             {% for org in bld_peer_orgs %}
             {% include './templates/inventory_ca.jinja2'  %}
             {% endfor %}
+            {% endfilter %}
+            {% filter indent(width=14, first=True) %}
             {% for org in bld_orderer_orgs %}
             {% include './templates/inventory_ca.jinja2'  %}
             {% endfor %}

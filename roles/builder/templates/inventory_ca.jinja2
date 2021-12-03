@@ -23,4 +23,6 @@ ca_{{ org.name | lower}}:
     service_start_cmd: /usr/local/bin/fabric-ca-server start
     condition_path_exists: /opt/hyperledger/fabric-ca/{{ org.name | lower }}/fabric-ca-server-config.yaml
     ansible_ssh_user: {{ org.ca.ssh_user | default(ansible_ssh_user) }}
+    ca_org_name: {{ org.name }}
+    ca_org_type: {{ org_type }}
 
