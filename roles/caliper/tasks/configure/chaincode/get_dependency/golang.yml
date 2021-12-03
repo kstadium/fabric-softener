@@ -1,6 +1,6 @@
 - name: go mod init
   shell:
-    cmd: /bin/bash -ic 'go mod init {{ chaincode.name }}'
+    cmd: /bin/bash -ic 'go mod init {{ chaincode.module_path }}'
     chdir: "{{ caliper_workspace }}/src/{{ chaincode.name }}/golang"
 
 - name: go mod tidy
