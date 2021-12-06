@@ -39,7 +39,7 @@
 
     - name: npm install caliper
       shell:
-        cmd: /bin/bash -ic 'npm install --only=prod @hyperledger/caliper-cli@{{ caliper_version | default(0.3.2) }}'
+        cmd: /bin/bash -ic 'npm install --only=prod @hyperledger/caliper-cli@{{ caliper_version | default("0.3.2") }}'
         chdir: "{{ caliper_workspace | mandatory }}"
   when: role != "worker"
 
