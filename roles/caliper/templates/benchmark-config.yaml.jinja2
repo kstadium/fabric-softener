@@ -9,6 +9,7 @@ test:
     type: {{ type }}
     number: {{ caliper_worker_num | default(1) }}
   rounds:
+{% if caliper_config_rounds is defined %}
 {% for round in caliper_config_rounds %}
 {% for callback in round.callbacks %}
   - label: {{ round.chaincode_id }}-{{ callback.name }}-{{round.target_tps}}tps
@@ -22,3 +23,4 @@ test:
     callback: benchmarks/lib/{{ round.chaincode_id }}/{{ callback.name }}.js
 {% endfor %}
 {% endfor %}
+{% endif %}
