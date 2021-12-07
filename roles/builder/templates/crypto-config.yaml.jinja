@@ -2,7 +2,7 @@ OrdererOrgs:
 {% for org in ( bld_orderer_orgs ) %}
   - Name: {{ org.name }}
     Domain: {{ org.domain }}
-    EnableNodeOUs: {{ org.enable_node_ous }} 
+    EnableNodeOUs: {{ org.enable_node_ous }}
     Specs:
 {% for orderer in org.orderers %}
       - Hostname: {{ orderer.host_name }}
@@ -14,7 +14,7 @@ PeerOrgs:
 {% for org in (bld_peer_orgs ) %}
   - Name: {{ org.name }}
     Domain: {{ org.domain }}
-    EnableNodeOUs: {{ org.enable_node_ous }} 
+    EnableNodeOUs: {{ org.enable_node_ous }}
     Specs:
 {% for peer in org.peers %}
       - Hostname: {{ peer.host_name }}
