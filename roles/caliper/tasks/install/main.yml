@@ -53,6 +53,7 @@
         install_targets:
           - node
           - package
+          - docker
           - dockercompose
   when: role == "worker"
 ...

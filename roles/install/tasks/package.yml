@@ -41,5 +41,4 @@
       file:
         path: /tmp/{{ go_tarball }}
         state: absent
-
   when: go_exists.rc != 0
