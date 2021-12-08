@@ -14,7 +14,7 @@
 
 - name: Check if crypto binary exists
   stat:
-    path: "{{ playbook_dir }}/{{ bld_msp_config_name }}/crypto-config"
+    path: "{{ playbook_dir }}/{{ bld_msp_config_name }}/bin"
   register: crypto_bin_exists
 
 - name: get crypto binary
