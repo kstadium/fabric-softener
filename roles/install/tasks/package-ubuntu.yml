@@ -8,36 +8,3 @@
     state: present
     update_cache: yes
     allow_unauthenticated: yes
-
-- name: check docker installed
-  become: true
-  shell: "which docker"
-  register: docker_exists
-  ignore_errors: true
-
-- name: Install docker
-  block:
-    - name: add Docker's official gpg key
-      apt_key:
-        keyring: /usr/share/keyrings/docker-archive-keyring.gpg
-        url: https://download.docker.com/linux/ubuntu/gpg
-    - name: setup stable repository
-      shell:
-        cmd: echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-    - name: install docker
-      apt:
-        name:
-          - docker-ce
-          - docker-ce-cli
-          - containerd.io
-        state: present
-        update_cache: yes
-    - name: Start docker service
-      become: true
-      systemd:
-        name: "docker"
-        enabled: yes
-        state: started
-  when: docker_exists.rc != 0
-  become: true
-

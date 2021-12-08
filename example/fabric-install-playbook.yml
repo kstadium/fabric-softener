@@ -8,6 +8,7 @@
             - stop
           - install:
             - package
+            - docker
             - fabric-v2
         install_fabric_version: v2.2.2
 

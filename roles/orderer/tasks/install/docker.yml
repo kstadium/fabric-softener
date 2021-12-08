@@ -1,0 +1,4 @@
+- name: include install role - docker
+  include_role:
+    name: install
+    tasks_from: docker.yml
