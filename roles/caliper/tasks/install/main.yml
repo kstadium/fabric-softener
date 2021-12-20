@@ -51,8 +51,8 @@
         tasks_from: main.yml
       vars:
         install_targets:
-          - node
           - package
+          - node
           - docker
           - dockercompose
   when: role == "worker"
